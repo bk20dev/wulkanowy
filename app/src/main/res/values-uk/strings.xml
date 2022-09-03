@@ -733,11 +733,11 @@
     <string name="pref_ads_once_per_visit">Дякуємо за вашу підтримку, повертайтеся пізніше для більшої кількості реклам</string>
     <string name="pref_ads_consent_title">Чи можемо ми використовувати ваші дані для відбивання реклами?</string>
     <string name="pref_ads_consent_description">Ви можете змінити свій вибір в будь-який час в налаштуваннях додатку. Ми можемо використовувати ваші дані для відбивання оголошень, адаптованої до вас або, використовуючи менше ваших даних, відбивати неперсоналізовані оголошення. Перегляньте нашу Політику конфіденційності для деталей</string>
-    <string name="pref_ads_summary_personalized">Personalized ads</string>
-    <string name="pref_ads_summary_non_personalized">Non-personalized ads</string>
-    <string name="pref_ads_over_18_years_old">I am over 18 years old</string>
-    <string name="pref_ads_option_personalized">Yes, personalized ads</string>
-    <string name="pref_ads_option_non_personalized">Yes, non-personalized ads</string>
+    <string name="pref_ads_summary_personalized">Персоналізовані оголошення</string>
+    <string name="pref_ads_summary_non_personalized">Неперсоналізована реклама</string>
+    <string name="pref_ads_over_18_years_old">Мені більше 18 років</string>
+    <string name="pref_ads_option_personalized">Так, персоналізована реклама</string>
+    <string name="pref_ads_option_non_personalized">Так, неперсоналізована реклама</string>
     <string name="pref_settings_advanced_title">Додатково</string>
     <string name="pref_settings_appearance_title">Вигляд та поведінка</string>
     <string name="pref_settings_notifications_title">Сповіщення</string>
