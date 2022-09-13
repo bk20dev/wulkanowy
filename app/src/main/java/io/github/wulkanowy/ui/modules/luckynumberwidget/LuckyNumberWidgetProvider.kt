@@ -2,14 +2,8 @@ package io.github.wulkanowy.ui.modules.luckynumberwidget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.res.Configuration
-import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -47,10 +41,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
 
         fun getThemeWidgetKey(appWidgetId: Int) = "lucky_number_widget_theme_$appWidgetId"
-
-        fun getHeightWidgetKey(appWidgetId: Int) = "lucky_number_widget_height_$appWidgetId"
-
-        fun getWidthWidgetKey(appWidgetId: Int) = "lucky_number_widget_width_$appWidgetId"
     }
 
     override fun onUpdate(
@@ -59,32 +49,30 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         appWidgetIds: IntArray?
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        appWidgetIds?.forEach { appWidgetId ->
-            val luckyNumber =
-                getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
-            val appIntent = PendingIntent.getActivity(
-                context,
-                LUCKY_NUMBER_PENDING_INTENT_ID,
-                SplashActivity.getStartIntent(context, Destination.LuckyNumber),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
-            )
 
-            if (luckyNumber is Resource.Error) {
-                Timber.e("Error loading lucky number for widget", luckyNumber.error)
+        val appIntent = PendingIntent.getActivity(
+            context,
+            LUCKY_NUMBER_PENDING_INTENT_ID,
+            SplashActivity.getStartIntent(context, Destination.LuckyNumber),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+        )
+
+        appWidgetIds?.forEach { widgetId ->
+            val studentId = sharedPref.getLong(getStudentWidgetKey(widgetId), 0)
+            val luckyNumberResource = getLuckyNumber(studentId, widgetId)
+            val luckyNumber = luckyNumberResource.dataOrNull?.luckyNumber?.toString()
+
+            if (luckyNumberResource is Resource.Error) {
+                Timber.e("Error loading lucky number for widget", luckyNumberResource.error)
             }
 
-            val remoteView =
-                RemoteViews(context.packageName, getCorrectLayoutId(appWidgetId, context))
-                    .apply {
-                        setTextViewText(
-                            R.id.luckyNumberWidgetNumber,
-                            luckyNumber.dataOrNull?.luckyNumber?.toString() ?: "#"
-                        )
-                        setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
-                    }
-
-            setStyles(remoteView, appWidgetId)
-            appWidgetManager.updateAppWidget(appWidgetId, remoteView)
+            val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber)
+                .apply {
+                    setTextViewText(R.id.luckyNumberWidgetValue, luckyNumber ?: "-")
+                    setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
+                    // TODO: Add lucky number history interaction
+                }
+            appWidgetManager.updateAppWidget(widgetId, remoteView)
         }
     }
 
@@ -92,72 +80,10 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         super.onDeleted(context, appWidgetIds)
         appWidgetIds?.forEach { appWidgetId ->
             with(sharedPref) {
-                delete(getHeightWidgetKey(appWidgetId))
                 delete(getStudentWidgetKey(appWidgetId))
                 delete(getThemeWidgetKey(appWidgetId))
-                delete(getWidthWidgetKey(appWidgetId))
             }
         }
-    }
-
-    override fun onAppWidgetOptionsChanged(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetId: Int,
-        newOptions: Bundle?
-    ) {
-        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-
-        val remoteView = RemoteViews(context.packageName, getCorrectLayoutId(appWidgetId, context))
-
-        setStyles(remoteView, appWidgetId, newOptions)
-        appWidgetManager.updateAppWidget(appWidgetId, remoteView)
-    }
-
-    private fun setStyles(views: RemoteViews, appWidgetId: Int, options: Bundle? = null) {
-        val width = options?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: sharedPref.getLong(
-            getWidthWidgetKey(appWidgetId), 74
-        ).toInt()
-        val height = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: sharedPref.getLong(
-            getHeightWidgetKey(appWidgetId), 74
-        ).toInt()
-
-        with(sharedPref) {
-            putLong(getWidthWidgetKey(appWidgetId), width.toLong())
-            putLong(getHeightWidgetKey(appWidgetId), height.toLong())
-        }
-
-        val rows = getCellsForSize(height)
-        val cols = getCellsForSize(width)
-
-        Timber.d("New lucky number widget measurement: %dx%d", width, height)
-        Timber.d("Widget size: $cols x $rows")
-
-        when {
-            1 == cols && 1 == rows -> views.setVisibility(imageTop = false, imageLeft = false)
-            1 == cols && 1 < rows -> views.setVisibility(imageTop = true, imageLeft = false)
-            1 < cols && 1 == rows -> views.setVisibility(imageTop = false, imageLeft = true)
-            1 == cols && 1 == rows -> views.setVisibility(imageTop = true, imageLeft = false)
-            2 == cols && 1 == rows -> views.setVisibility(imageTop = false, imageLeft = true)
-            else -> views.setVisibility(imageTop = false, imageLeft = false, title = true)
-        }
-    }
-
-    private fun RemoteViews.setVisibility(
-        imageTop: Boolean,
-        imageLeft: Boolean,
-        title: Boolean = false
-    ) {
-        setViewVisibility(R.id.luckyNumberWidgetImageTop, if (imageTop) VISIBLE else GONE)
-        setViewVisibility(R.id.luckyNumberWidgetImageLeft, if (imageLeft) VISIBLE else GONE)
-        setViewVisibility(R.id.luckyNumberWidgetTitle, if (title) VISIBLE else GONE)
-        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-    }
-
-    private fun getCellsForSize(size: Int): Int {
-        var n = 2
-        while (74 * n - 30 < size) ++n
-        return n - 1
     }
 
     private fun getLuckyNumber(studentId: Long, appWidgetId: Int) = runBlocking {
@@ -185,18 +111,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 Timber.e(e, "An error has occurred in lucky number provider")
             }
             Resource.Error(e)
-        }
-    }
-
-    private fun getCorrectLayoutId(appWidgetId: Int, context: Context): Int {
-        val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-        val isSystemDarkMode =
-            context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
-        return if (savedTheme == 1L || (savedTheme == 2L && isSystemDarkMode)) {
-            R.layout.widget_luckynumber_dark
-        } else {
-            R.layout.widget_luckynumber
         }
     }
 }
