@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue.COMPLEX_UNIT_DIP
+import android.util.TypedValue.COMPLEX_UNIT_SP
+import android.view.View
 import android.widget.RemoteViews
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -38,7 +40,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     lateinit var sharedPref: SharedPrefProvider
 
     companion object {
-        private const val LUCKY_NUMBER_WIDGET_MAX_SIZE = 225
+        private const val LUCKY_NUMBER_WIDGET_MAX_SIZE = 196
 
         const val LUCKY_NUMBER_PENDING_INTENT_ID = 200
 
@@ -77,7 +79,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                     // TODO: Add lucky number history interaction
                 }
 
-            updateContainerSize(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView)
+            resizeWidget(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView)
             appWidgetManager.updateAppWidget(widgetId, remoteView)
         }
     }
@@ -95,16 +97,27 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         }
 
         val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber)
-        updateContainerSize(context, newOptions, remoteView)
+        resizeWidget(context, newOptions, remoteView)
         appWidgetManager.partiallyUpdateAppWidget(appWidgetId, remoteView)
     }
 
-    private fun updateContainerSize(context: Context, options: Bundle, remoteViews: RemoteViews) {
+    private fun resizeWidget(context: Context, options: Bundle, remoteViews: RemoteViews) {
         val (width, height) = WidgetSizeProvider.getSize(context, options)
         val size = minOf(width, height, LUCKY_NUMBER_WIDGET_MAX_SIZE).toFloat()
         remoteViews.setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
         remoteViews.setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+        resizeWidgetContents(height, remoteViews)
         Timber.v("LuckyNumberWidget resized: ${width}x${height}")
+    }
+
+    private fun resizeWidgetContents(height: Int, remoteViews: RemoteViews) {
+        if (height < 150) {
+            remoteViews.setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, 44f)
+            remoteViews.setViewVisibility(R.id.luckyNumberWidgetHistoryButton, View.GONE)
+        } else {
+            remoteViews.setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, 72f)
+            remoteViews.setViewVisibility(R.id.luckyNumberWidgetHistoryButton, View.VISIBLE)
+        }
     }
 
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
