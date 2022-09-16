@@ -4,6 +4,8 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.os.Bundle
+import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.widget.RemoteViews
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -18,6 +20,7 @@ import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
+import io.github.wulkanowy.utils.WidgetSizeProvider
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,6 +38,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     lateinit var sharedPref: SharedPrefProvider
 
     companion object {
+        private const val LUCKY_NUMBER_WIDGET_MAX_SIZE = 225
 
         const val LUCKY_NUMBER_PENDING_INTENT_ID = 200
 
@@ -72,8 +76,35 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                     setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
                     // TODO: Add lucky number history interaction
                 }
+
+            updateContainerSize(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView)
             appWidgetManager.updateAppWidget(widgetId, remoteView)
         }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+
+        if (context == null || newOptions == null || appWidgetManager == null) {
+            return
+        }
+
+        val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber)
+        updateContainerSize(context, newOptions, remoteView)
+        appWidgetManager.partiallyUpdateAppWidget(appWidgetId, remoteView)
+    }
+
+    private fun updateContainerSize(context: Context, options: Bundle, remoteViews: RemoteViews) {
+        val (width, height) = WidgetSizeProvider.getSize(context, options)
+        val size = minOf(width, height, LUCKY_NUMBER_WIDGET_MAX_SIZE).toFloat()
+        remoteViews.setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+        remoteViews.setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+        Timber.v("LuckyNumberWidget resized: ${width}x${height}")
     }
 
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
