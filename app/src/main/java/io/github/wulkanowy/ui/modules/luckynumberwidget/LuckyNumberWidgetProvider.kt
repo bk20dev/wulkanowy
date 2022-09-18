@@ -112,19 +112,27 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     private fun resizeWidget(context: Context, options: Bundle, remoteViews: RemoteViews) {
         val (width, height) = WidgetSizeProvider.getSize(context, options)
         val size = minOf(width, height, LUCKY_NUMBER_WIDGET_MAX_SIZE).toFloat()
-        remoteViews.setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
-        remoteViews.setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
-        resizeWidgetContents(height, remoteViews)
-        Timber.v("LuckyNumberWidget resized: ${width}x${height}")
+        resizeWidgetContent(size, remoteViews)
+        Timber.v("LuckyNumberWidget resized: ${width}x${height} ($size)")
     }
 
-    private fun resizeWidgetContents(height: Int, remoteViews: RemoteViews) {
-        if (height < 150) {
-            remoteViews.setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, 44f)
-            remoteViews.setViewVisibility(R.id.luckyNumberWidgetHistoryButton, View.GONE)
-        } else {
-            remoteViews.setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, 72f)
-            remoteViews.setViewVisibility(R.id.luckyNumberWidgetHistoryButton, View.VISIBLE)
+    private fun resizeWidgetContent(size: Float, remoteViews: RemoteViews) {
+        var historyButtonVisibility = View.VISIBLE
+        var luckyNumberTextSize = 72f
+
+        if (size < 150) {
+            luckyNumberTextSize = 44f
+            historyButtonVisibility = View.GONE
+        }
+        if (size < 75) {
+            luckyNumberTextSize = 26f
+        }
+
+        remoteViews.apply {
+            setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+            setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+            setViewVisibility(R.id.luckyNumberWidgetHistoryButton, historyButtonVisibility)
+            setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, luckyNumberTextSize)
         }
     }
 
