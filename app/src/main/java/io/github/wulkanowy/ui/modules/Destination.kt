@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
+import io.github.wulkanowy.ui.modules.luckynumber.history.LuckyNumberHistoryFragment
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
@@ -42,7 +43,8 @@ sealed class Destination private constructor() : Parcelable {
         CONFERENCE(Conference),
         SCHOOL_ANNOUNCEMENT(SchoolAnnouncement),
         SCHOOL(School),
-        LUCKY_NUMBER(More),
+        LUCKY_NUMBER(LuckyNumber),
+        LUCKY_NUMBER_HISTORY(LuckyNumberHistory),
         MORE(More),
         MESSAGE(Message);
     }
@@ -125,6 +127,13 @@ sealed class Destination private constructor() : Parcelable {
     object LuckyNumber : Destination() {
         override val type get() = Type.LUCKY_NUMBER
         override val fragment get() = LuckyNumberFragment.newInstance()
+    }
+
+    @Parcelize
+    @Serializable
+    object LuckyNumberHistory : Destination() {
+        override val type get() = Type.LUCKY_NUMBER_HISTORY
+        override val fragment get() = LuckyNumberHistoryFragment.newInstance()
     }
 
     @Parcelize

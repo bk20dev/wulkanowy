@@ -43,6 +43,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         private const val LUCKY_NUMBER_WIDGET_MAX_SIZE = 196
 
         const val LUCKY_NUMBER_PENDING_INTENT_ID = 200
+        const val LUCKY_NUMBER_HISTORY_PENDING_INTENT_ID = 201
 
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
 
@@ -63,6 +64,13 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 
+        val historyIntent = PendingIntent.getActivity(
+            context,
+            LUCKY_NUMBER_HISTORY_PENDING_INTENT_ID,
+            SplashActivity.getStartIntent(context, Destination.LuckyNumberHistory),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+        )
+
         appWidgetIds?.forEach { widgetId ->
             val studentId = sharedPref.getLong(getStudentWidgetKey(widgetId), 0)
             val luckyNumberResource = getLuckyNumber(studentId, widgetId)
@@ -76,7 +84,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 .apply {
                     setTextViewText(R.id.luckyNumberWidgetValue, luckyNumber ?: "-")
                     setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
-                    // TODO: Add lucky number history interaction
+                    setOnClickPendingIntent(R.id.luckyNumberWidgetHistoryButton, historyIntent)
                 }
 
             resizeWidget(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView)
