@@ -3,13 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/luckyNumberWidgetContainer"
-    android:layout_width="165dp"
-    android:layout_height="165dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/shape_badge"
-    android:backgroundTint="@color/material_dynamic_secondary95"
     android:theme="@style/WulkanowyTheme"
-    tools:context=".ui.modules.luckynumberwidget.LuckyNumberWidgetProvider">
+    tools:context=".ui.modules.luckynumberwidget.LuckyNumberWidgetProvider"
+    tools:layout_height="165dp"
+    tools:layout_width="165dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/shape_badge"
+        android:tint="@color/grade_blue"
+        tools:ignore="UseAppTint" />
 
     <TextView
         android:id="@+id/luckyNumberWidgetValue"

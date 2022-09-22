@@ -129,10 +129,14 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         }
 
         remoteViews.apply {
-            setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
-            setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
-            setViewVisibility(R.id.luckyNumberWidgetHistoryButton, historyButtonVisibility)
             setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, luckyNumberTextSize)
+            if (android.os.Build.VERSION.SDK_INT >= 31) {
+                setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+                setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
+                setViewVisibility(R.id.luckyNumberWidgetHistoryButton, historyButtonVisibility)
+            } else {
+                setViewVisibility(R.id.luckyNumberWidgetHistoryButton, View.GONE)
+            }
         }
     }
 
