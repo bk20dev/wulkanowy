@@ -36,6 +36,7 @@
         <item name="colorDivider">@color/colorDividerInverse</item>
         <item name="colorSwipeRefresh">@color/material_dynamic_secondary20</item>
         <item name="colorMessageMedium">@color/dashboard_message_medium_light</item>
+        <item name="colorWidgetContainer">@color/material_dynamic_secondary20</item>
         <item name="android:windowBackground">?colorSurface</item>
         <item name="android:textColor">@color/material_dynamic_neutral90</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>

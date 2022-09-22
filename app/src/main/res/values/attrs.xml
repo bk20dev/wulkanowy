@@ -5,4 +5,5 @@
     <attr name="colorTimetableCanceled" format="color" />
     <attr name="colorTimetableChange" format="color" />
     <attr name="colorMessageMedium" format="color" />
+    <attr name="colorWidgetContainer" format="color" />
 </resources>
