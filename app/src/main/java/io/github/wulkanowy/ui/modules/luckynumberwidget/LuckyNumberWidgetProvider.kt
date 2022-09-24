@@ -86,7 +86,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                     setOnClickPendingIntent(R.id.luckyNumberWidgetHistoryButton, historyIntent)
                 }
 
-            resizeWidget(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView) // TUTUAJ
+            resizeWidget(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView)
             appWidgetManager.updateAppWidget(widgetId, remoteView)
         }
     }
