@@ -45,8 +45,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         const val LUCKY_NUMBER_HISTORY_PENDING_INTENT_ID = 201
 
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
-
-        fun getThemeWidgetKey(appWidgetId: Int) = "lucky_number_widget_theme_$appWidgetId"
     }
 
     override fun onUpdate(
@@ -136,10 +134,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
         appWidgetIds?.forEach { appWidgetId ->
-            with(sharedPref) {
-                delete(getStudentWidgetKey(appWidgetId))
-                delete(getThemeWidgetKey(appWidgetId))
-            }
+            sharedPref.delete(getStudentWidgetKey(appWidgetId))
         }
     }
 
