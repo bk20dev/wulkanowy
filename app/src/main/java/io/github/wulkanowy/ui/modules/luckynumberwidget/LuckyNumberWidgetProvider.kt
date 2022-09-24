@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.os.Bundle
-import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.util.TypedValue.COMPLEX_UNIT_SP
 import android.view.View
 import android.widget.RemoteViews
@@ -87,7 +86,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                     setOnClickPendingIntent(R.id.luckyNumberWidgetHistoryButton, historyIntent)
                 }
 
-            resizeWidget(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView)
+            resizeWidget(context, appWidgetManager.getAppWidgetOptions(widgetId), remoteView) // TUTUAJ
             appWidgetManager.updateAppWidget(widgetId, remoteView)
         }
     }
@@ -112,11 +111,11 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     private fun resizeWidget(context: Context, options: Bundle, remoteViews: RemoteViews) {
         val (width, height) = WidgetSizeProvider.getSize(context, options)
         val size = minOf(width, height, LUCKY_NUMBER_WIDGET_MAX_SIZE).toFloat()
-        resizeWidgetContent(size, remoteViews)
+        resizeWidgetContents(size, remoteViews)
         Timber.v("LuckyNumberWidget resized: ${width}x${height} ($size)")
     }
 
-    private fun resizeWidgetContent(size: Float, remoteViews: RemoteViews) {
+    private fun resizeWidgetContents(size: Float, remoteViews: RemoteViews) {
         var historyButtonVisibility = View.VISIBLE
         var luckyNumberTextSize = 72f
 
@@ -130,13 +129,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
         remoteViews.apply {
             setTextViewTextSize(R.id.luckyNumberWidgetValue, COMPLEX_UNIT_SP, luckyNumberTextSize)
-            if (android.os.Build.VERSION.SDK_INT >= 31) {
-                setViewLayoutWidth(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
-                setViewLayoutHeight(R.id.luckyNumberWidgetContainer, size, COMPLEX_UNIT_DIP)
-                setViewVisibility(R.id.luckyNumberWidgetHistoryButton, historyButtonVisibility)
-            } else {
-                setViewVisibility(R.id.luckyNumberWidgetHistoryButton, View.GONE)
-            }
+            setViewVisibility(R.id.luckyNumberWidgetHistoryButton, historyButtonVisibility)
         }
     }
 
