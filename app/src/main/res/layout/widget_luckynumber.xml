@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:text="@string/widget_lucky_number_value_preview"
         android:textColor="?attr/colorPrimary"
         android:textSize="72sp"
         android:textStyle="bold"

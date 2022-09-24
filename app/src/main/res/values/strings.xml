@@ -647,6 +647,10 @@
     <string name="all_add_to_calendar">Add to calendar</string>
 
 
+    <!--Lucky Number Widget-->
+    <string name="widget_lucky_number_value_preview" translatable="false">17</string>
+
+
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">No lessons</string>
     <string name="widget_timetable_theme_title">Choose theme</string>
