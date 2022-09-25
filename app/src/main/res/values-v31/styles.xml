@@ -38,13 +38,17 @@
         <item name="colorDivider">@color/colorDivider</item>
         <item name="colorSwipeRefresh">@color/material_dynamic_secondary90</item>
         <item name="colorMessageMedium">@color/dashboard_message_medium_dark</item>
-        <item name="colorWidgetContainer">@color/material_dynamic_secondary95</item>
         <item name="android:textColor">@color/material_dynamic_neutral10</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
         <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
+    </style>
+
+    <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
+        <item name="colorSurface">@color/material_dynamic_secondary95</item>
+        <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Elevated"></style>

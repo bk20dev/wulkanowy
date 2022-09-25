@@ -25,7 +25,6 @@
         <item name="colorDivider">@color/colorDividerInverse</item>
         <item name="colorSwipeRefresh">@color/colorSwipeRefreshDark</item>
         <item name="colorMessageMedium">@color/dashboard_message_medium_light</item>
-        <item name="colorWidgetContainer">@color/widget_container_dark</item>
         <item name="android:windowBackground">?colorSurface</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:navigationBarColor">@color/colorNavigationBarDark</item>
@@ -67,6 +66,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
+        <item name="colorSurface">@color/widget_container_dark</item>
+        <item name="colorPrimaryContainer">?attr/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">?attr/colorSurface</item>
     </style>
 
     <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Filled">

@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:theme="@style/WulkanowyTheme"
+    android:theme="@style/Wulkanowy.Widget.Theme"
     tools:context=".ui.modules.luckynumberwidget.LuckyNumberWidgetProvider">
 
     <ImageView
@@ -16,7 +16,8 @@
         android:importantForAccessibility="no"
         android:scaleType="fitCenter"
         android:src="@drawable/shape_badge"
-        android:tint="?attr/colorWidgetContainer"
+        android:tint="?attr/colorSurface"
+        app:tint="?attr/colorSurface"
         tools:ignore="UseAppTint" />
 
     <TextView
@@ -36,10 +37,11 @@
         android:layout_height="60dp"
         android:layout_gravity="left|bottom"
         android:background="@drawable/background_luckynumber_widget_button"
+        android:backgroundTint="?attr/colorPrimaryContainer"
         android:contentDescription="@string/lucky_number_history_button"
         android:src="@drawable/ic_history"
-        android:tint="?attr/colorPrimary"
-        app:tint="?attr/colorPrimary"
+        android:tint="?attr/colorOnPrimaryContainer"
+        app:tint="?attr/colorOnPrimaryContainer"
         tools:ignore="UseAppTint" />
 
 </FrameLayout>
