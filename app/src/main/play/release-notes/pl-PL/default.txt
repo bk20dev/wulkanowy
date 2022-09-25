@@ -1,9 +1,7 @@
-Wersja 1.6.0
+Wersja 1.7.5
 
-- dodaliśmy możliwość usuwania wielu wiadomości jednocześnie
-- dodaliśmy opcję szybkiego dodawania sprawdzianów do kalendarza
-- dodaliśmy średnią ucznia w wykresach ocen klasy
-- naprawiliśmy rzadki błąd dotyczący problemów z automatycznym odświeżaniem ekranu startowego
-- naprawiliśmy błąd z liczeniem średniej w drugim semestrze
+- naprawiliśmy kilka błędów w obsłudze nowego modułu wiadomości
+- naprawiliśmy wyświetlanie napisu "Brak ocen", jesli uczeń nie zdobył w danym semestrze jeszcze żadnych ocen
+- naprawiliśmy logowanie do aplikacji rodzicom będącym jednocześnie nauczycielami
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

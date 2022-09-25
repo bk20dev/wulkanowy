@@ -51,5 +51,7 @@
         <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
     </style>
 
-    <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Elevated"></style>
+    <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="android:background" tools:ignore="PrivateResource">@color/m3_appbar_overlay_color</item>
+    </style>
 </resources>
