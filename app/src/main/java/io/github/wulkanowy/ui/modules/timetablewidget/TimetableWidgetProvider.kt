@@ -157,7 +157,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
         if (savedConfigureTheme == 1L || (savedConfigureTheme == 2L && isSystemDarkMode)) {
             currentTheme = 1L
-            layoutId = R.layout.widget_timetable_dark
+//            layoutId = R.layout.widget_timetable_dark
         }
 
         val nextNavIntent = createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT)
@@ -188,15 +188,15 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         )
 
         val remoteView = RemoteViews(context.packageName, layoutId).apply {
-            setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
+//            setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
             setTextViewText(
                 R.id.timetableWidgetDate,
                 date.toFormattedString("EEEE, dd.MM").capitalise()
             )
-            setTextViewText(
-                R.id.timetableWidgetName,
-                student?.nickOrName ?: context.getString(R.string.all_no_data)
-            )
+//            setTextViewText(
+//                R.id.timetableWidgetName,
+//                student?.nickOrName ?: context.getString(R.string.all_no_data)
+//            )
 
             student?.let {
                 setImageViewBitmap(R.id.timetableWidgetAccount, context.createAvatarBitmap(it))
@@ -206,7 +206,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setOnClickPendingIntent(R.id.timetableWidgetNext, nextNavIntent)
             setOnClickPendingIntent(R.id.timetableWidgetPrev, prevNavIntent)
             setOnClickPendingIntent(R.id.timetableWidgetDate, resetNavIntent)
-            setOnClickPendingIntent(R.id.timetableWidgetName, resetNavIntent)
+//            setOnClickPendingIntent(R.id.timetableWidgetName, resetNavIntent)
             setOnClickPendingIntent(R.id.timetableWidgetAccount, accountIntent)
             setPendingIntentTemplate(R.id.timetableWidgetList, appIntent)
         }
