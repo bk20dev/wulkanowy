@@ -104,7 +104,7 @@ class TimetableWidgetFactory(
                 if (savedCurrentTheme == 0L) R.layout.item_widget_timetable_small
                 else R.layout.item_widget_timetable_small_dark
             }
-            savedCurrentTheme == 1L -> R.layout.item_widget_timetable_dark
+//            savedCurrentTheme == 1L -> R.layout.item_widget_timetable_dark
             else -> R.layout.item_widget_timetable
         }
     }
