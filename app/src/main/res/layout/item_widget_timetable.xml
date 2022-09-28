@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_widget_item_timetable"
-    android:backgroundTint="@color/material_dynamic_neutral99"
+    android:backgroundTint="?attr/backgroundColor"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingHorizontal="16dp"

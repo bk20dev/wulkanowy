@@ -53,6 +53,7 @@
     <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
         <item name="colorSurface">@color/widget_container</item>
         <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
+        <item name="backgroundColor">@color/widget_list_item</item>
     </style>
 
     <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Filled">

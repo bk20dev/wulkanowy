@@ -72,6 +72,7 @@
         <item name="colorSurface">@color/widget_container_dark</item>
         <item name="colorPrimaryContainer">?attr/colorPrimary</item>
         <item name="colorOnPrimaryContainer">?attr/colorSurface</item>
+        <item name="backgroundColor">@color/widget_list_item_dark</item>
     </style>
 
     <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Filled">
