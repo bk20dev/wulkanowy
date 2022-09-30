@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.timetablewidget
 
-import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
@@ -8,7 +7,6 @@ import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.AdapterView.INVALID_POSITION
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
@@ -98,17 +96,6 @@ class TimetableWidgetFactory(
         }
     }
 
-    private fun getItemLayout(lesson: Timetable): Int {
-        return when {
-            prefRepository.showWholeClassPlan == TimetableMode.SMALL_OTHER_GROUP && !lesson.isStudentPlan -> {
-                if (savedCurrentTheme == 0L) R.layout.item_widget_timetable_small
-                else R.layout.item_widget_timetable_small_dark
-            }
-//            savedCurrentTheme == 1L -> R.layout.item_widget_timetable_dark
-            else -> R.layout.item_widget_timetable
-        }
-    }
-
     private fun getLessons(date: LocalDate, studentId: Long) = try {
         runBlocking {
             if (!studentRepository.isStudentSaved()) return@runBlocking emptyList<Timetable>()
@@ -120,8 +107,7 @@ class TimetableWidgetFactory(
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(student, semester, date, date, false)
                 .toFirstResult().dataOrNull?.lessons.orEmpty()
-                .sortedWith(compareBy({ it.number }, { !it.isStudentPlan }))
-                .filter {
+                .sortedWith(compareBy({ it.number }, { !it.isStudentPlan })).filter {
                     if (prefRepository.showWholeClassPlan == TimetableMode.ONLY_CURRENT_GROUP) {
                         it.isStudentPlan
                     } else true
@@ -132,134 +118,99 @@ class TimetableWidgetFactory(
         emptyList()
     }
 
-    @SuppressLint("DefaultLocale")
+    companion object {
+        const val TIME_FORMAT_STYLE = "HH:mm"
+    }
+
     override fun getViewAt(position: Int): RemoteViews? {
-        if (position == INVALID_POSITION || lessons.getOrNull(position) == null) return null
+        val lesson = lessons.getOrNull(position) ?: return null
 
-        val lesson = lessons[position]
-        return RemoteViews(context.packageName, getItemLayout(lesson)).apply {
-            setTextViewText(R.id.timetableWidgetItemSubject, lesson.subject)
+        val lessonStartTime = lesson.start.toFormattedString(TIME_FORMAT_STYLE)
+        val lessonEndTime = lesson.end.toFormattedString(TIME_FORMAT_STYLE)
+
+        val roomText = "${context.getString(R.string.timetable_room)} ${lesson.room}"
+
+        val remoteViews = RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
             setTextViewText(R.id.timetableWidgetItemNumber, lesson.number.toString())
-            setTextViewText(
-                R.id.timetableWidgetItemTimeStart,
-                lesson.start.toFormattedString("HH:mm")
-            )
-            setTextViewText(
-                R.id.timetableWidgetItemTimeFinish,
-                lesson.end.toFormattedString("HH:mm")
-            )
-
-            updateDescription(this, lesson)
-
-            if (lesson.canceled) {
-                updateStylesCanceled(this)
-            } else {
-                updateStylesNotCanceled(this, lesson)
-            }
-
+            setTextViewText(R.id.timetableWidgetItemTimeStart, lessonStartTime)
+            setTextViewText(R.id.timetableWidgetItemTimeFinish, lessonEndTime)
+            setTextViewText(R.id.timetableWidgetItemSubject, lesson.subject)
+            setTextViewText(R.id.timetableWidgetItemRoom, roomText)
+            setTextViewText(R.id.timetableWidgetItemTeacher, lesson.teacher)
+            setTextViewText(R.id.timetableWidgetItemDescription, lesson.info)
             setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
+            clearLessonStyles(this)
         }
-    }
 
-    private fun updateDescription(remoteViews: RemoteViews, lesson: Timetable) {
-        with(remoteViews) {
-            if (lesson.info.isNotBlank() && !lesson.changes) {
-                setTextViewText(R.id.timetableWidgetItemDescription, lesson.info)
-                setViewVisibility(R.id.timetableWidgetItemDescription, VISIBLE)
-                setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
-                setViewVisibility(R.id.timetableWidgetItemTeacher, GONE)
-            } else {
-                setViewVisibility(R.id.timetableWidgetItemDescription, GONE)
-                setViewVisibility(R.id.timetableWidgetItemRoom, VISIBLE)
-                setViewVisibility(R.id.timetableWidgetItemTeacher, VISIBLE)
-            }
-        }
-    }
-
-    private fun updateStylesCanceled(remoteViews: RemoteViews) {
-        with(remoteViews) {
-            setInt(
-                R.id.timetableWidgetItemSubject, "setPaintFlags",
-                STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
-            )
-            setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(timetableCanceledColor!!))
-            setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(timetableCanceledColor!!))
-            setTextColor(
-                R.id.timetableWidgetItemDescription,
-                context.getCompatColor(timetableCanceledColor!!)
+        when {
+            lesson.canceled -> applyCancelledLessonStyles(remoteViews)
+            lesson.changes or lesson.info.isNotBlank() -> applyChangedLessonStyles(
+                remoteViews,
+                lesson
             )
         }
+
+        return remoteViews
     }
 
-    private fun updateStylesNotCanceled(remoteViews: RemoteViews, lesson: Timetable) {
-        with(remoteViews) {
+    private fun clearLessonStyles(remoteViews: RemoteViews) {
+        val defaultTextColor = context.getCompatColor(textColor ?: 0)
+
+        remoteViews.apply {
             setInt(R.id.timetableWidgetItemSubject, "setPaintFlags", ANTI_ALIAS_FLAG)
-            setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(textColor!!))
-            setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(textColor!!))
-            setTextColor(
-                R.id.timetableWidgetItemDescription,
-                context.getCompatColor(timetableChangeColor!!)
-            )
-
-            updateNotCanceledLessonNumberColor(this, lesson)
-            updateNotCanceledSubjectColor(this, lesson)
-
-            val teacherChange = lesson.teacherOld.isNotBlank()
-            updateNotCanceledRoom(this, lesson, teacherChange)
-            updateNotCanceledTeacher(this, lesson, teacherChange)
+            setViewVisibility(R.id.timetableWidgetItemRoom, VISIBLE)
+            setViewVisibility(R.id.timetableWidgetItemTeacher, VISIBLE)
+            setViewVisibility(R.id.timetableWidgetItemIcon, GONE)
+            setViewVisibility(R.id.timetableWidgetItemDescription, GONE)
+            setTextColor(R.id.timetableWidgetItemNumber, defaultTextColor)
+            setTextColor(R.id.timetableWidgetItemSubject, defaultTextColor)
+            setTextColor(R.id.timetableWidgetItemRoom, defaultTextColor)
+            setTextColor(R.id.timetableWidgetItemTeacher, defaultTextColor)
+            setTextColor(R.id.timetableWidgetItemDescription, defaultTextColor)
         }
     }
 
-    private fun updateNotCanceledLessonNumberColor(remoteViews: RemoteViews, lesson: Timetable) {
-        remoteViews.setTextColor(
-            R.id.timetableWidgetItemNumber, context.getCompatColor(
-                if (lesson.changes || (lesson.info.isNotBlank() && !lesson.canceled)) timetableChangeColor!!
-                else textColor!!
-            )
-        )
-    }
+    private fun applyCancelledLessonStyles(remoteViews: RemoteViews) {
+        val cancelledThemeColor = context.getCompatColor(timetableCanceledColor ?: 0)
+        val strikeThroughPaintFlags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
 
-    private fun updateNotCanceledSubjectColor(remoteViews: RemoteViews, lesson: Timetable) {
-        remoteViews.setTextColor(
-            R.id.timetableWidgetItemSubject, context.getCompatColor(
-                if (lesson.subjectOld.isNotBlank() && lesson.subject != lesson.subjectOld) timetableChangeColor!!
-                else textColor!!
-            )
-        )
-    }
-
-    private fun updateNotCanceledRoom(
-        remoteViews: RemoteViews,
-        lesson: Timetable,
-        teacherChange: Boolean
-    ) {
-        with(remoteViews) {
-            if (lesson.room.isNotBlank()) {
-                setTextViewText(
-                    R.id.timetableWidgetItemRoom,
-                    if (teacherChange) lesson.room
-                    else "${context.getString(R.string.timetable_room)} ${lesson.room}"
-                )
-
-                setTextColor(
-                    R.id.timetableWidgetItemRoom, context.getCompatColor(
-                        if (lesson.roomOld.isNotBlank() && lesson.room != lesson.roomOld) timetableChangeColor!!
-                        else textColor!!
-                    )
-                )
-            } else setTextViewText(R.id.timetableWidgetItemRoom, "")
+        remoteViews.apply {
+            setInt(R.id.timetableWidgetItemSubject, "setPaintFlags", strikeThroughPaintFlags)
+            setTextColor(R.id.timetableWidgetItemNumber, cancelledThemeColor)
+            setTextColor(R.id.timetableWidgetItemSubject, cancelledThemeColor)
+            setTextColor(R.id.timetableWidgetItemDescription, cancelledThemeColor)
+            setViewVisibility(R.id.timetableWidgetItemDescription, VISIBLE)
+            setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
+            setViewVisibility(R.id.timetableWidgetItemTeacher, GONE)
         }
     }
 
-    private fun updateNotCanceledTeacher(
-        remoteViews: RemoteViews,
-        lesson: Timetable,
-        teacherChange: Boolean
-    ) {
-        remoteViews.setTextViewText(
-            R.id.timetableWidgetItemTeacher,
-            if (teacherChange) lesson.teacher
-            else ""
-        )
+    private fun applyChangedLessonStyles(remoteViews: RemoteViews, lesson: Timetable) {
+        val changesTextColor = context.getCompatColor(timetableChangeColor ?: 0)
+
+        remoteViews.apply {
+            setTextColor(R.id.timetableWidgetItemNumber, changesTextColor)
+            setTextColor(R.id.timetableWidgetItemDescription, changesTextColor)
+            setViewVisibility(R.id.timetableWidgetItemIcon, VISIBLE)
+            setImageViewResource(R.id.timetableWidgetItemIcon, R.drawable.ic_timetable_widget_swap)
+        }
+
+        if (lesson.subject != lesson.subjectOld) {
+            remoteViews.setTextColor(R.id.timetableWidgetItemSubject, changesTextColor)
+        }
+
+        if (lesson.room != lesson.roomOld) {
+            remoteViews.setTextColor(R.id.timetableWidgetItemRoom, changesTextColor)
+        }
+
+        if (lesson.teacher != lesson.teacherOld) {
+            remoteViews.setTextColor(R.id.timetableWidgetItemTeacher, changesTextColor)
+        }
+
+        if (lesson.info.isNotBlank() && !lesson.changes) {
+            remoteViews.setViewVisibility(R.id.timetableWidgetItemDescription, VISIBLE)
+            remoteViews.setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
+            remoteViews.setViewVisibility(R.id.timetableWidgetItemTeacher, GONE)
+        }
     }
 }

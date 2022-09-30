@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textSize="24sp"
-        tools:text="1" />
+        tools:text="1"
+        tools:textColor="?attr/colorTimetableChange" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -71,18 +72,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceBodySmall"
-                tools:text="Sala 213" />
+                tools:text="Sala 213"
+                tools:textColor="?attr/colorTimetableChange" />
 
             <TextView
                 android:id="@+id/timetableWidgetItemTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:lines="1"
                 android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="@color/timetable_change_light"
-                android:visibility="gone"
-                tools:text="Dorota Nowak"
-                tools:visibility="visible" />
+                tools:text="Dorota Nowak" />
 
         </LinearLayout>
 
@@ -91,23 +92,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceBodySmall"
-            android:textColor="@color/timetable_canceled_light"
-            android:visibility="gone"
             tools:text="Lekcja odwołana: uczniowie zwolnieni do domu"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/timetableWidgetItemIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:contentDescription="@string/timetable_changes"
-        android:src="@drawable/ic_timetable_widget_swap"
-        android:tint="@color/timetable_change_light"
-        android:visibility="gone"
-        app:tint="@color/timetable_change_light"
+        android:tint="?attr/colorTimetableChange"
+        app:tint="?attr/colorTimetableChange"
         tools:ignore="UseAppTint"
-        tools:visibility="visible" />
+        tools:src="@drawable/ic_timetable_widget_swap" />
 
 </LinearLayout>
