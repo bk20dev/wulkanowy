@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_widget_timetable"
     android:backgroundTint="?attr/colorSurface"
+    android:clipToOutline="true"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
     android:theme="@style/Wulkanowy.Widget.Theme"
@@ -52,17 +53,39 @@
             app:tint="?attr/colorPrimary"
             tools:ignore="UseAppTint" />
 
-        <ImageButton
+        <FrameLayout
             android:id="@+id/timetableWidgetAccount"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
-            android:background="?android:selectableItemBackground"
-            android:contentDescription="@string/account_title"
-            android:src="@drawable/ic_widget_account"
-            android:tint="?attr/colorPrimary"
-            app:tint="?attr/colorPrimary"
-            tools:ignore="UseAppTint" />
+            android:background="@drawable/background_timetable_widget_avatar"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="true"
+            android:clipToOutline="true"
+            android:contentDescription="@string/account_quick_manager"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:importantForAccessibility="yes"
+            android:outlineProvider="background">
+
+            <ImageView
+                android:id="@+id/timetableWidgetAccountBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                tools:src="@drawable/background_timetable_widget_avatar" />
+
+            <TextView
+                android:id="@+id/timetableWidgetAccountInitials"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                tools:text="AW" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -70,8 +93,10 @@
         android:id="@+id/timetableWidgetList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:divider="@android:color/transparent"
         android:dividerHeight="4dp"
+        android:paddingBottom="16dp"
         tools:listitem="@layout/item_widget_timetable" />
 
 </LinearLayout>
