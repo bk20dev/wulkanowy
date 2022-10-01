@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.timetablewidget
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.View.GONE
@@ -13,13 +14,10 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Timetable
-import io.github.wulkanowy.data.enums.TimetableMode
-import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.data.toFirstResult
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getCurrentThemeWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getDateWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getTodayLastLessonEndDateTimeWidgetKey
@@ -33,15 +31,12 @@ class TimetableWidgetFactory(
     private val timetableRepository: TimetableRepository,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val prefRepository: PreferencesRepository,
     private val sharedPref: SharedPrefProvider,
     private val context: Context,
     private val intent: Intent?
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private var lessons = emptyList<Timetable>()
-
-    private var savedCurrentTheme: Long? = null
 
     private var timetableCanceledColor: Int? = null
 
@@ -68,7 +63,6 @@ class TimetableWidgetFactory(
             val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
             val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
-            updateTheme(appWidgetId)
             lessons = getLessons(date, studentId)
 
             val todayLastLessonEndTimestamp = lessons.maxOfOrNull { it.end }
@@ -79,20 +73,6 @@ class TimetableWidgetFactory(
                     sync = true
                 )
             }
-        }
-    }
-
-    private fun updateTheme(appWidgetId: Int) {
-        savedCurrentTheme = sharedPref.getLong(getCurrentThemeWidgetKey(appWidgetId), 0)
-
-        if (savedCurrentTheme == 0L) {
-            timetableCanceledColor = R.color.timetable_canceled_light
-            textColor = android.R.color.black
-            timetableChangeColor = R.color.timetable_change_light
-        } else {
-            timetableCanceledColor = R.color.timetable_canceled_dark
-            textColor = android.R.color.white
-            timetableChangeColor = R.color.timetable_change_dark
         }
     }
 
@@ -107,11 +87,7 @@ class TimetableWidgetFactory(
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(student, semester, date, date, false)
                 .toFirstResult().dataOrNull?.lessons.orEmpty()
-                .sortedWith(compareBy({ it.number }, { !it.isStudentPlan })).filter {
-                    if (prefRepository.showWholeClassPlan == TimetableMode.ONLY_CURRENT_GROUP) {
-                        it.isStudentPlan
-                    } else true
-                }
+                .sortedWith(compareBy({ it.number }, { !it.isStudentPlan }))
         }
     } catch (e: Exception) {
         Timber.e(e, "An error has occurred in timetable widget factory")
@@ -127,7 +103,6 @@ class TimetableWidgetFactory(
 
         val lessonStartTime = lesson.start.toFormattedString(TIME_FORMAT_STYLE)
         val lessonEndTime = lesson.end.toFormattedString(TIME_FORMAT_STYLE)
-
         val roomText = "${context.getString(R.string.timetable_room)} ${lesson.room}"
 
         val remoteViews = RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
@@ -139,18 +114,34 @@ class TimetableWidgetFactory(
             setTextViewText(R.id.timetableWidgetItemTeacher, lesson.teacher)
             setTextViewText(R.id.timetableWidgetItemDescription, lesson.info)
             setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
-            clearLessonStyles(this)
         }
+
+        updateTheme()
+        clearLessonStyles(remoteViews)
 
         when {
             lesson.canceled -> applyCancelledLessonStyles(remoteViews)
             lesson.changes or lesson.info.isNotBlank() -> applyChangedLessonStyles(
-                remoteViews,
-                lesson
+                remoteViews, lesson
             )
         }
 
         return remoteViews
+    }
+
+    private fun updateTheme() {
+        when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                textColor = android.R.color.white
+                timetableChangeColor = R.color.timetable_change_dark
+                timetableCanceledColor = R.color.timetable_canceled_dark
+            }
+            else -> {
+                textColor = android.R.color.black
+                timetableChangeColor = R.color.timetable_change_light
+                timetableCanceledColor = R.color.timetable_canceled_light
+            }
+        }
     }
 
     private fun clearLessonStyles(remoteViews: RemoteViews) {
