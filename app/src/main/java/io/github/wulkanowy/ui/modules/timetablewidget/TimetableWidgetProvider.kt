@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.res.Configuration
 import android.widget.RemoteViews
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
@@ -70,11 +69,6 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             "timetable_widget_today_last_lesson_end_date_time_$appWidgetId"
 
         fun getStudentWidgetKey(appWidgetId: Int) = "timetable_widget_student_$appWidgetId"
-
-        fun getThemeWidgetKey(appWidgetId: Int) = "timetable_widget_theme_$appWidgetId"
-
-        fun getCurrentThemeWidgetKey(appWidgetId: Int) =
-            "timetable_widget_current_theme_$appWidgetId"
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -135,8 +129,6 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             with(sharedPref) {
                 delete(getStudentWidgetKey(appWidgetId))
                 delete(getDateWidgetKey(appWidgetId))
-                delete(getThemeWidgetKey(appWidgetId))
-                delete(getCurrentThemeWidgetKey(appWidgetId))
             }
         }
     }
@@ -144,25 +136,13 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     private fun updateWidget(
         context: Context, appWidgetId: Int, date: LocalDate, student: Student?
     ) {
-        val savedConfigureTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-        val isSystemDarkMode =
-            context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        var currentTheme = 0L
-        var layoutId = R.layout.widget_timetable
-
-        if (savedConfigureTheme == 1L || (savedConfigureTheme == 2L && isSystemDarkMode)) {
-            currentTheme = 1L
-//            layoutId = R.layout.widget_timetable_dark
-        }
-
         val nextNavIntent = createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT)
         val prevNavIntent = createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV)
         val resetNavIntent =
             createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET)
         val adapterIntent = Intent(context, TimetableWidgetService::class.java).apply {
             putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
-            //make Intent unique
-            action = appWidgetId.toString()
+            action = appWidgetId.toString() //make Intent unique
         }
         val appIntent = PendingIntent.getActivity(
             context,
@@ -171,12 +151,9 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 
-        val remoteView = RemoteViews(context.packageName, layoutId).apply {
-//            setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
-            setTextViewText(
-                R.id.timetableWidgetDate, date.toFormattedString("EEEE, dd.MM").capitalise()
-            )
-
+        val formattedDate = date.toFormattedString("EEE, dd.MM").capitalise()
+        val remoteView = RemoteViews(context.packageName, R.layout.widget_timetable).apply {
+            setTextViewText(R.id.timetableWidgetDate, formattedDate)
             setRemoteAdapter(R.id.timetableWidgetList, adapterIntent)
             setOnClickPendingIntent(R.id.timetableWidgetNext, nextNavIntent)
             setOnClickPendingIntent(R.id.timetableWidgetPrev, prevNavIntent)
@@ -189,15 +166,15 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         }
 
         with(sharedPref) {
-            putLong(getCurrentThemeWidgetKey(appWidgetId), currentTheme)
             putLong(getDateWidgetKey(appWidgetId), date.toEpochDay(), true)
         }
 
         with(appWidgetManager) {
-            updateAppWidget(appWidgetId, remoteView)
+            partiallyUpdateAppWidget(appWidgetId, remoteView)
             notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
-            Timber.d("TimetableWidgetProvider updated")
         }
+
+        Timber.d("TimetableWidgetProvider updated")
     }
 
     private fun createNavIntent(
