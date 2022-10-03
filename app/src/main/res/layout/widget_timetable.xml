@@ -89,15 +89,31 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/timetableWidgetList"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"
-        android:paddingBottom="16dp"
-        tools:listfooter="@layout/item_widget_timetable_footer"
-        tools:listitem="@layout/item_widget_timetable" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/timetableWidgetList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="4dp"
+            android:paddingBottom="16dp"
+            tools:listfooter="@layout/item_widget_timetable_footer"
+            tools:listitem="@layout/item_widget_timetable" />
+
+        <TextView
+            android:id="@+id/timetableWidgetEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/widget_timetable_no_items"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
 
 </LinearLayout>

@@ -153,6 +153,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
         val formattedDate = date.toFormattedString("EEE, dd.MM").capitalise()
         val remoteView = RemoteViews(context.packageName, R.layout.widget_timetable).apply {
+            setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
             setTextViewText(R.id.timetableWidgetDate, formattedDate)
             setRemoteAdapter(R.id.timetableWidgetList, adapterIntent)
             setOnClickPendingIntent(R.id.timetableWidgetNext, nextNavIntent)
