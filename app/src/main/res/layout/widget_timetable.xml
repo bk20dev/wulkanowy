@@ -97,6 +97,7 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="4dp"
         android:paddingBottom="16dp"
+        tools:listfooter="@layout/item_widget_timetable_footer"
         tools:listitem="@layout/item_widget_timetable" />
 
 </LinearLayout>

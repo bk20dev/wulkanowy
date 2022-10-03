@@ -25,6 +25,7 @@ import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
+import java.time.Instant
 import java.time.LocalDate
 
 class TimetableWidgetFactory(
@@ -44,11 +45,16 @@ class TimetableWidgetFactory(
 
     private var timetableChangeColor: Int? = null
 
+    private var lastSynchronizationInstant: Instant? = null
+
     override fun getLoadingView() = null
 
     override fun hasStableIds() = true
 
-    override fun getCount() = lessons.size
+    override fun getCount() = when {
+        lessons.isEmpty() -> 0
+        else -> lessons.size + 1
+    }
 
     override fun getViewTypeCount() = 2
 
@@ -64,6 +70,7 @@ class TimetableWidgetFactory(
             val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
             lessons = getLessons(date, studentId)
+            lastSynchronizationInstant = Instant.now()
 
             val todayLastLessonEndTimestamp = lessons.maxOfOrNull { it.end }
             if (date == LocalDate.now() && todayLastLessonEndTimestamp != null) {
@@ -99,6 +106,14 @@ class TimetableWidgetFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews? {
+        if (position == lessons.size) {
+            val synchronizationInstant = lastSynchronizationInstant ?: Instant.MIN
+            val synchronizationText = getSynchronizationInfoText(synchronizationInstant)
+            return RemoteViews(context.packageName, R.layout.item_widget_timetable_footer).apply {
+                setTextViewText(R.id.timetableWidgetSynchronizationTime, synchronizationText)
+            }
+        }
+
         val lesson = lessons.getOrNull(position) ?: return null
 
         val lessonStartTime = lesson.start.toFormattedString(TIME_FORMAT_STYLE)
@@ -204,4 +219,15 @@ class TimetableWidgetFactory(
             remoteViews.setViewVisibility(R.id.timetableWidgetItemTeacher, GONE)
         }
     }
+
+    private fun getSynchronizationInfoText(synchronizationInstant: Instant) =
+        synchronizationInstant.run {
+            val synchronizationTime = toFormattedString(TIME_FORMAT_STYLE)
+            val synchronizationDate = toFormattedString()
+            context.getString(
+                R.string.widget_timetable_last_synchronization,
+                synchronizationDate,
+                synchronizationTime,
+            )
+        }
 }
