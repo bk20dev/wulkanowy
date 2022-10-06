@@ -4,8 +4,9 @@
     android:id="@+id/timetableWidgetSynchronizationTime"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="end"
     android:padding="12dp"
     android:textAlignment="textEnd"
-    android:gravity="end"
     android:textAppearance="?attr/textAppearanceBodySmall"
-    tools:text="Synchronizacja o 17:57" />
+    android:theme="@style/Wulkanowy.Widget.Theme"
+    tools:text="Synchronizacja 06.10.2022 o 17:57" />

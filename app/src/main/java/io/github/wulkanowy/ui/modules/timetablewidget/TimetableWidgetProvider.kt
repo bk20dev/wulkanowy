@@ -10,6 +10,7 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.widget.RemoteViews
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -247,12 +248,14 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         )
 
         // Create background bitmap
-        val screenDensity = context.resources.displayMetrics.density
-        val avatarSize = (48 * screenDensity).toInt()
         val avatarDrawableResource = R.drawable.background_timetable_widget_avatar
-        AppCompatResources.getDrawable(context, avatarDrawableResource)?.apply {
-            setTint(student.avatarColor.toInt())
-            val backgroundBitmap = toBitmap(avatarSize, avatarSize)
+        AppCompatResources.getDrawable(context, avatarDrawableResource)?.let { drawable ->
+            val screenDensity = context.resources.displayMetrics.density
+            val avatarSize = (48 * screenDensity).toInt()
+            val backgroundBitmap = DrawableCompat.wrap(drawable).run {
+                DrawableCompat.setTint(this, student.avatarColor.toInt())
+                toBitmap(avatarSize, avatarSize)
+            }
             remoteViews.setImageViewBitmap(R.id.timetableWidgetAccountBackground, backgroundBitmap)
         }
 

@@ -11,6 +11,7 @@
     android:orientation="horizontal"
     android:paddingHorizontal="16dp"
     android:paddingVertical="12dp"
+    android:theme="@style/Wulkanowy.Widget.Theme"
     tools:context=".ui.modules.timetablewidget.TimetableWidgetFactory">
 
     <TextView
