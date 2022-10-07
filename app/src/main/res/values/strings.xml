@@ -659,10 +659,14 @@
 
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">No lessons</string>
+    <string name="widget_timetable_last_synchronization">Synchronized on %s at %s</string>
     <string name="widget_timetable_theme_title">Choose theme</string>
     <string name="widget_timetable_theme_light">Light</string>
     <string name="widget_timetable_theme_dark">Dark</string>
     <string name="widget_timetable_theme_system">System Theme</string>
+    <!--Timetable Widget Preview-->
+    <string name="widget_timetable_preview_date">Mon, 03.10</string>
+    <string name="widget_timetable_initials_preview" translatable="false">AW</string>
 
 
     <!--Preferences-->
