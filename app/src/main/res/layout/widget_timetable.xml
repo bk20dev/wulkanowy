@@ -35,7 +35,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/all_next"
+            android:contentDescription="@string/all_prev"
             android:rotation="180"
             android:src="@drawable/ic_chevron_right"
             android:tint="?attr/colorPrimary"
@@ -73,7 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
-                tools:src="@drawable/background_timetable_widget_avatar" />
+                tools:src="@drawable/background_timetable_widget_avatar"
+                tools:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/timetableWidgetAccountInitials"
