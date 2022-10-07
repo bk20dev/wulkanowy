@@ -51,6 +51,7 @@
     </style>
 
     <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
+        <item name="colorPrimary">@color/widget_primary_color_light</item>
         <item name="colorSurface">@color/widget_container</item>
         <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
     </style>
