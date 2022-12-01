@@ -7,6 +7,8 @@ import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.core.view.*
 import androidx.core.view.WindowInsetsCompat.Type.navigationBars
 import androidx.core.view.WindowInsetsCompat.Type.statusBars
@@ -51,6 +53,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var appInfo: AppInfo
+
+    private var onBackCallback: OnBackPressedCallback? = null
 
     private var accountMenu: MenuItem? = null
 
@@ -110,6 +114,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         this.savedInstanceState = savedInstanceState
         messageContainer = binding.mainMessageContainer
         updateHelper.messageContainer = binding.mainFragmentContainer
+        onBackCallback = onBackPressedDispatcher.addCallback(this, enabled = false) {
+            presenter.onBackPressed()
+        }
 
         val destination = intent.getStringExtra(EXTRA_START_DESTINATION)
             ?.takeIf { savedInstanceState == null }
@@ -288,6 +295,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.pushFragment(fragment)
+        onBackCallback?.isEnabled = !isRootView
     }
 
     override fun popView(depth: Int) {
@@ -295,10 +303,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.safelyPopFragments(depth)
-    }
-
-    override fun onBackPressed() {
-        presenter.onBackPressed { super.onBackPressed() }
+        onBackCallback?.isEnabled = !isRootView
     }
 
     override fun showStudentAvatar(student: Student) {

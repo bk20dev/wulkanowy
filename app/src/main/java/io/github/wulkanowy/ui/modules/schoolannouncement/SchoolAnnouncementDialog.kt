@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.databinding.DialogSchoolAnnouncementBinding
 import io.github.wulkanowy.utils.lifecycleAwareVariable
+import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.toFormattedString
 
 class SchoolAnnouncementDialog : DialogFragment() {
@@ -22,17 +24,15 @@ class SchoolAnnouncementDialog : DialogFragment() {
 
         private const val ARGUMENT_KEY = "item"
 
-        fun newInstance(exam: SchoolAnnouncement) = SchoolAnnouncementDialog().apply {
-            arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, exam) }
+        fun newInstance(announcement: SchoolAnnouncement) = SchoolAnnouncementDialog().apply {
+            arguments = bundleOf(ARGUMENT_KEY to announcement)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.Wulkanowy_Dialog_Theme)
-        arguments?.run {
-            announcement = getSerializable(ARGUMENT_KEY) as SchoolAnnouncement
-        }
+        announcement = requireArguments().serializable(ARGUMENT_KEY)
     }
 
     override fun onCreateView(
