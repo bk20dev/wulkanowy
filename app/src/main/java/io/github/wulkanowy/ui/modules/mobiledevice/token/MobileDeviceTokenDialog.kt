@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.mobiledevice.token
 
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.graphics.BitmapFactory
@@ -12,6 +13,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.getSystemService
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.MobileDeviceToken
@@ -26,6 +28,8 @@ class MobileDeviceTokenDialog : BaseDialogFragment<DialogMobileDeviceBinding>(),
     @Inject
     lateinit var presenter: MobileDeviceTokenPresenter
 
+    private var dialogView: View? = null
+
     companion object {
 
         fun newInstance() = MobileDeviceTokenDialog()
@@ -36,11 +40,18 @@ class MobileDeviceTokenDialog : BaseDialogFragment<DialogMobileDeviceBinding>(),
         setStyle(STYLE_NO_TITLE, 0)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogMobileDeviceBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogMobileDeviceBinding.inflate(inflater).apply { binding = this }.root
+    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,11 +1,13 @@
 package io.github.wulkanowy.ui.modules.account.accountquick
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.DialogAccountQuickBinding
@@ -26,6 +28,8 @@ class AccountQuickDialog : BaseDialogFragment<DialogAccountQuickBinding>(), Acco
     @Inject
     lateinit var presenter: AccountQuickPresenter
 
+    private var dialogView: View? = null
+
     companion object {
 
         private const val STUDENTS_ARGUMENT_KEY = "students"
@@ -41,11 +45,18 @@ class AccountQuickDialog : BaseDialogFragment<DialogAccountQuickBinding>(), Acco
         setStyle(STYLE_NO_TITLE, 0)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogAccountQuickBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogAccountQuickBinding.inflate(inflater).apply { binding = this }.root
+    ) = dialogView
 
     @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
