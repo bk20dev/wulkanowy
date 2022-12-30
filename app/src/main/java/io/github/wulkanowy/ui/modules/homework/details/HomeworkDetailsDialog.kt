@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -78,26 +76,11 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
             homeworkDialogClose.setOnClickListener { dismiss() }
         }
 
-        if (presenter.isHomeworkFullscreen) {
-            dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-        } else {
-            dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-        }
-
         with(binding.homeworkDialogRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = detailsAdapter.apply {
                 onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
-                onFullScreenClickListener = {
-                    dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-                    presenter.isHomeworkFullscreen = true
-                }
-                onFullScreenExitClickListener = {
-                    dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-                    presenter.isHomeworkFullscreen = false
-                }
                 onDeleteClickListener = { homework -> presenter.deleteHomework(homework) }
-                isHomeworkFullscreen = presenter.isHomeworkFullscreen
                 homework = this@HomeworkDetailsDialog.homework
             }
         }
