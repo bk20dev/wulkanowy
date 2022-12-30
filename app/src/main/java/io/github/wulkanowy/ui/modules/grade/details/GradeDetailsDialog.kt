@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.enums.GradeColorTheme
@@ -16,7 +18,10 @@ import io.github.wulkanowy.utils.*
 
 class GradeDetailsDialog : DialogFragment() {
 
-    private var binding: DialogGradeBinding by lifecycleAwareVariable()
+    private var _binding: DialogGradeBinding? = null
+    private val binding get() = _binding!!
+
+    private var dialogView: View? = null
 
     private lateinit var grade: Grade
 
@@ -43,11 +48,18 @@ class GradeDetailsDialog : DialogFragment() {
         gradeColorTheme = requireArguments().serializable(COLOR_THEME_KEY)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogGradeBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogGradeBinding.inflate(inflater).apply { binding = this }.root
+    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

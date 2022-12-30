@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.databinding.DialogTimetableBinding
@@ -18,7 +20,10 @@ import java.time.Instant
 
 class TimetableDialog : DialogFragment() {
 
-    private var binding: DialogTimetableBinding by lifecycleAwareVariable()
+    private var _binding: DialogTimetableBinding? = null
+    private val binding get() = _binding!!
+
+    private var dialogView: View? = null
 
     private lateinit var lesson: Timetable
 
@@ -37,11 +42,18 @@ class TimetableDialog : DialogFragment() {
         lesson = requireArguments().serializable(ARGUMENT_KEY)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogTimetableBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogTimetableBinding.inflate(inflater).apply { binding = this }.root
+    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
