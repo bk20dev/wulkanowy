@@ -218,10 +218,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/examDialogAddToCalendar"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+            style="@style/Widget.Material3.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
             android:contentDescription="@string/all_add_to_calendar"
             android:insetLeft="0dp"
             android:insetTop="0dp"
@@ -230,21 +231,20 @@
             android:text="@string/all_add"
             app:icon="@drawable/ic_calendar_all"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/examDialogClose" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/examDialogClose"
             style="@style/Widget.Material3.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
-            android:minWidth="88dp"
             android:text="@string/all_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:minWidth="300dp"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:minWidth="300dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -124,17 +122,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="0dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
-                android:minWidth="88dp"
                 android:text="@string/all_close"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/additionalLessonDialogAdd" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/additionalLessonDialogAdd"
@@ -142,12 +138,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
-                android:minWidth="88dp"
                 android:text="@string/all_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
