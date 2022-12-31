@@ -1,11 +1,13 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -67,10 +69,8 @@ class GradeDetailsDialog : DialogFragment() {
         with(binding) {
             gradeDialogSubject.text = grade.subject
 
-            gradeDialogColorAndWeightValue.run {
-                text = context.getString(R.string.grade_weight_value, grade.weight)
-                setBackgroundResource(grade.getGradeColor())
-            }
+            gradeDialogWeightValue.text = grade.weight
+            gradeDialogWeightLayout.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), grade.getGradeColor()))
 
             gradeDialogDateValue.text = grade.date.toFormattedString()
             gradeDialogColorValue.text = getString(grade.colorStringId)
@@ -84,7 +84,7 @@ class GradeDetailsDialog : DialogFragment() {
 
             gradeDialogValue.run {
                 text = grade.entry
-                setBackgroundResource(grade.getBackgroundColor(gradeColorTheme))
+                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), grade.getBackgroundColor(gradeColorTheme)))
             }
 
             gradeDialogTeacherValue.text = grade.teacher.ifBlank { getString(R.string.all_no_data) }
