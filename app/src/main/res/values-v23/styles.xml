@@ -3,6 +3,6 @@
 
     <style name="WulkanowyTheme" parent="BaseWulkanowyTheme">
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:statusBarColor">@color/colorStatusBarLight</item>
     </style>
 </resources>
