@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.TypedValue.COMPLEX_UNIT_SP
 import android.view.View
@@ -21,7 +22,6 @@ import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
-import io.github.wulkanowy.utils.WidgetSizeProvider
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
@@ -107,7 +107,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     }
 
     private fun resizeWidget(context: Context, options: Bundle, remoteViews: RemoteViews) {
-        val (width, height) = WidgetSizeProvider.getSize(context, options)
+        val (width, height) = options.getWidgetSize(context)
         val size = minOf(width, height, LUCKY_NUMBER_WIDGET_MAX_SIZE).toFloat()
         resizeWidgetContents(size, remoteViews)
         Timber.v("LuckyNumberWidget resized: ${width}x${height} ($size)")
@@ -163,6 +163,22 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 Timber.e(e, "An error has occurred in lucky number provider")
             }
             Resource.Error(e)
+        }
+    }
+
+    private fun Bundle.getWidgetSize(context: Context): Pair<Int, Int> {
+        val minWidth = getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+        val maxWidth = getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
+        val minHeight = getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+        val maxHeight = getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+
+        val orientation = context.resources.configuration.orientation
+        val isPortrait = orientation == Configuration.ORIENTATION_PORTRAIT
+
+        return if (isPortrait) {
+            minWidth to maxHeight
+        } else {
+            maxWidth to minHeight
         }
     }
 }
