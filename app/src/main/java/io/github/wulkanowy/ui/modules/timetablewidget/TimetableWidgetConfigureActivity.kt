@@ -2,15 +2,12 @@ package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.appwidget.AppWidgetManager.*
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ActivityWidgetConfigureBinding
 import io.github.wulkanowy.ui.base.BaseActivity
@@ -60,23 +57,6 @@ class TimetableWidgetConfigureActivity :
         }
 
         configureAdapter.onClickListener = presenter::onItemSelect
-    }
-
-    override fun showThemeDialog() {
-        var items = arrayOf(
-            getString(R.string.widget_timetable_theme_light),
-            getString(R.string.widget_timetable_theme_dark)
-        )
-
-        if (appInfo.systemVersion >= Build.VERSION_CODES.Q) items += getString(R.string.widget_timetable_theme_system)
-
-        dialog = MaterialAlertDialogBuilder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
-            .setTitle(R.string.widget_timetable_theme_title)
-            .setOnDismissListener { presenter.onDismissThemeView() }
-            .setSingleChoiceItems(items, -1) { _, which ->
-                presenter.onThemeSelect(which)
-            }
-            .show()
     }
 
     override fun updateData(data: List<StudentWithSemesters>, selectedStudentId: Long) {

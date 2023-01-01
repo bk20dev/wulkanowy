@@ -57,6 +57,12 @@
     <color name="colorSwipeRefreshDark">#ff383838</color>
     <color name="colorSwipeRefresh">#ffffffff</color>
 
+    <color name="widget_primary_color_light">#FF944841</color>
+    <color name="widget_container">#FFEDEA</color>
+    <color name="widget_container_dark">#462527</color>
+    <color name="widget_list_item">#FFFBFF</color>
+    <color name="widget_list_item_dark">#201A19</color>
+
     <color name="note_positive">#a0c431</color>
     <color name="note_negative">#d43f3f</color>
 

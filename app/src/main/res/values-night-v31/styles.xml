@@ -51,4 +51,10 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
+    <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
+        <item name="colorSurface">@color/material_dynamic_secondary20</item>
+        <item name="colorPrimaryContainer">?attr/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">?attr/colorSurface</item>
+        <item name="backgroundColor">@color/material_dynamic_neutral10</item>
+    </style>
 </resources>

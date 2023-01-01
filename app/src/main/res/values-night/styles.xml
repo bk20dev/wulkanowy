@@ -67,4 +67,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">?android:textColorPrimary</item>
     </style>
+
+    <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
+        <item name="colorSurface">@color/widget_container_dark</item>
+        <item name="colorPrimaryContainer">?attr/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">?attr/colorSurface</item>
+        <item name="backgroundColor">@color/widget_list_item_dark</item>
+    </style>
 </resources>

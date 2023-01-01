@@ -46,4 +46,9 @@
         <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
     </style>
 
+    <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
+        <item name="colorSurface">@color/material_dynamic_secondary95</item>
+        <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
+        <item name="backgroundColor">@color/material_dynamic_neutral99</item>
+    </style>
 </resources>

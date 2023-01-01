@@ -20,17 +20,16 @@
         android:paddingVertical="16dp">
 
         <TextView
-            android:id="@+id/timetableWidgetDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:lines="1"
+            android:text="Pon, 03.10"
             android:textAppearance="?attr/textAppearanceHeadline5"
-            tools:text="Pon, 12.05" />
+            tools:ignore="HardcodedText" />
 
         <ImageButton
-            android:id="@+id/timetableWidgetPrev"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
@@ -43,7 +42,6 @@
             tools:ignore="UseAppTint" />
 
         <ImageButton
-            android:id="@+id/timetableWidgetNext"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -53,63 +51,46 @@
             app:tint="?attr/colorPrimary"
             tools:ignore="UseAppTint" />
 
-        <FrameLayout
-            android:id="@+id/timetableWidgetAccount"
+        <TextView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:background="@drawable/background_timetable_widget_avatar"
-            android:backgroundTint="@android:color/transparent"
-            android:clickable="true"
-            android:clipToOutline="true"
+            android:backgroundTint="?attr/colorPrimary"
             android:contentDescription="@string/account_quick_manager"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:importantForAccessibility="yes"
-            android:outlineProvider="background">
-
-            <ImageView
-                android:id="@+id/timetableWidgetAccountBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:importantForAccessibility="no"
-                tools:src="@drawable/background_timetable_widget_avatar"
-                tools:tint="?attr/colorPrimary" />
-
-            <TextView
-                android:id="@+id/timetableWidgetAccountInitials"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="?attr/textAppearanceTitleLarge"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                tools:text="AW" />
-        </FrameLayout>
+            android:gravity="center"
+            android:text="AW"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnPrimary" />
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
-        <ListView
-            android:id="@+id/timetableWidgetList"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="4dp"
-            android:paddingBottom="16dp"
-            tools:listfooter="@layout/item_widget_timetable_footer"
-            tools:listitem="@layout/item_widget_timetable" />
+            android:layout_height="56dp"
+            android:layout_marginBottom="4dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/background_widget_item_timetable"
+            app:tint="?attr/backgroundColor" />
 
-        <TextView
-            android:id="@+id/timetableWidgetEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/widget_timetable_no_items"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:visibility="gone" />
-    </FrameLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="4dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/background_widget_item_timetable"
+            app:tint="?attr/backgroundColor" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/background_widget_item_timetable"
+            app:tint="?attr/backgroundColor" />
+    </LinearLayout>
 </LinearLayout>
