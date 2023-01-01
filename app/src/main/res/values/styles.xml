@@ -23,8 +23,9 @@
         <item name="colorDivider">@color/colorDivider</item>
         <item name="colorSwipeRefresh">@color/colorSwipeRefresh</item>
         <item name="colorMessageMedium">@color/dashboard_message_medium_dark</item>
-        <item name="android:statusBarColor">@android:color/darker_gray</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:navigationBarColor">@color/colorNavigationBarLight</item>
+        <item name="android:statusBarColor">@color/colorStatusBarLight</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
         <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
     </style>
@@ -58,7 +59,7 @@
     </style>
 
     <style name="Widget.Wulkanowy.CardView" parent="Widget.Material3.CardView.Filled">
-        <item name="cardBackgroundColor">@color/colorCards</item>
+        <item name="cardBackgroundColor">@color/surface_1</item>
     </style>
 
     <style name="WulkanowyTheme.TextAppearanceBottomNavigation">
@@ -68,17 +69,4 @@
     <style name="WulkanowyTheme.Login" parent="WulkanowyTheme.NoActionBar" />
 
     <style name="WulkanowyTheme.MessageSend" parent="WulkanowyTheme.NoActionBar" />
-
-    <style name="Wulkanowy.Dialog" parent="Widget.Material3.CardView.Filled">
-        <item name="shapeAppearance">@style/ShapeAppearance.Wulkanowy.MediumComponent</item>
-    </style>
-
-    <style name="ShapeAppearance.Wulkanowy.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">28dp</item>
-    </style>
-
-    <style name="Wulkanowy.Dialog.Theme" parent="Theme.Material3.DayNight.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
 </resources>

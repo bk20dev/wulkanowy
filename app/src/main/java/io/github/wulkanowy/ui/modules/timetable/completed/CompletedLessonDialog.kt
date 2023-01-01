@@ -1,20 +1,23 @@
 package io.github.wulkanowy.ui.modules.timetable.completed
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import io.github.wulkanowy.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.databinding.DialogLessonCompletedBinding
-import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.serializable
 
 class CompletedLessonDialog : DialogFragment() {
 
-    private var binding: DialogLessonCompletedBinding by lifecycleAwareVariable()
+    private var _binding: DialogLessonCompletedBinding? = null
+    private val binding get() = _binding!!
+
+    private var dialogView: View? = null
 
     private lateinit var completedLesson: CompletedLesson
 
@@ -29,15 +32,22 @@ class CompletedLessonDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.Wulkanowy_Dialog_Theme)
+        setStyle(STYLE_NO_TITLE, 0)
         completedLesson = requireArguments().serializable(ARGUMENT_KEY)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogLessonCompletedBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogLessonCompletedBinding.inflate(inflater).apply { binding = this }.root
+    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

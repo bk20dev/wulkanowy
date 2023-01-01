@@ -35,29 +35,6 @@
             app:tint="?colorPrimary"
             tools:ignore="ContentDescription" />
 
-        <ImageButton
-            android:id="@+id/homework_dialog_full_screen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="5dp"
-            app:srcCompat="@drawable/ic_fullscreen"
-            app:tint="?colorOnBackground"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
-            android:id="@+id/homework_dialog_full_screen_exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="5dp"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_fullscreen_exit"
-            app:tint="?colorOnBackground"
-            tools:ignore="ContentDescription" />
-
     </LinearLayout>
 
     <TextView

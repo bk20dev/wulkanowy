@@ -1,9 +1,8 @@
-Wersja 1.8.1
+Wersja 1.8.3
 
-- naprawiliśmy liczenie średniej ucznia w ocenach klasy dla wykresu "Wszystkie"
-- zmieniliśmy kolejność przycisków akcji w podglądzie wiadomości
-- ulepszyliśmy oznaczenie nieodczytanych wiadomości
-- naprawiliśmy pokazywanie informacji o odczytanej wiadomości w wysłanych
-- dodaliśmy opcję ręcznego wybierania skrzynki pocztowej
+- naprawiliśmy logowanie dla użytkowników systemu Resman Rzeszów
+- dodaliśmy wsparcie dla nowej platformy z Tomaszowa Mazowieckiego
+- poprawiliśmy dopasowywanie skrzynek pocztowych do uczniów
+- naprawiliśmy literówkę w tytule wiadomości z szablonem usprawiedliwienia
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

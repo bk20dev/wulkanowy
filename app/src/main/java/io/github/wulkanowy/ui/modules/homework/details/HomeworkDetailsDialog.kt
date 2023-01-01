@@ -1,14 +1,14 @@
 package io.github.wulkanowy.ui.modules.homework.details
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
@@ -23,6 +23,8 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
 
     @Inject
     lateinit var presenter: HomeworkDetailsPresenter
+
+    private var dialogView: View? = null
 
     @Inject
     lateinit var detailsAdapter: HomeworkDetailsAdapter
@@ -47,11 +49,18 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
         homework = requireArguments().serializable(ARGUMENT_KEY)
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogHomeworkBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogHomeworkBinding.inflate(inflater).apply { binding = this }.root
+    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,26 +76,11 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
             homeworkDialogClose.setOnClickListener { dismiss() }
         }
 
-        if (presenter.isHomeworkFullscreen) {
-            dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-        } else {
-            dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-        }
-
         with(binding.homeworkDialogRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = detailsAdapter.apply {
                 onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
-                onFullScreenClickListener = {
-                    dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-                    presenter.isHomeworkFullscreen = true
-                }
-                onFullScreenExitClickListener = {
-                    dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-                    presenter.isHomeworkFullscreen = false
-                }
                 onDeleteClickListener = { homework -> presenter.deleteHomework(homework) }
-                isHomeworkFullscreen = presenter.isHomeworkFullscreen
                 homework = this@HomeworkDetailsDialog.homework
             }
         }

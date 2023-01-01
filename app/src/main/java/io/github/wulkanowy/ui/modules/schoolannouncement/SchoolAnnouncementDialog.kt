@@ -1,22 +1,25 @@
 package io.github.wulkanowy.ui.modules.schoolannouncement
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.core.text.parseAsHtml
 import androidx.fragment.app.DialogFragment
-import io.github.wulkanowy.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.databinding.DialogSchoolAnnouncementBinding
-import io.github.wulkanowy.utils.lifecycleAwareVariable
+import io.github.wulkanowy.utils.parseUonetHtml
 import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.toFormattedString
 
 class SchoolAnnouncementDialog : DialogFragment() {
 
-    private var binding: DialogSchoolAnnouncementBinding by lifecycleAwareVariable()
+    private var _binding: DialogSchoolAnnouncementBinding? = null
+    private val binding get() = _binding!!
+
+    private var dialogView: View? = null
 
     private lateinit var announcement: SchoolAnnouncement
 
@@ -31,15 +34,22 @@ class SchoolAnnouncementDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.Wulkanowy_Dialog_Theme)
+        setStyle(STYLE_NO_TITLE, 0)
         announcement = requireArguments().serializable(ARGUMENT_KEY)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        dialogView = DialogSchoolAnnouncementBinding.inflate(layoutInflater).apply { _binding = this }.root
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(dialogView)
+            .create()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogSchoolAnnouncementBinding.inflate(inflater).also { binding = it }.root
+    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,7 +57,7 @@ class SchoolAnnouncementDialog : DialogFragment() {
         with(binding) {
             announcementDialogSubjectValue.text = announcement.subject
             announcementDialogDateValue.text = announcement.date.toFormattedString()
-            announcementDialogDescriptionValue.text = announcement.content.parseAsHtml()
+            announcementDialogDescriptionValue.text = announcement.content.parseUonetHtml()
 
             announcementDialogClose.setOnClickListener { dismiss() }
         }

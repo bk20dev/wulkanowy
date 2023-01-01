@@ -1,10 +1,12 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -203,7 +205,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         with(holder.binding) {
             gradeItemValue.run {
                 text = grade.entry
-                setBackgroundResource(grade.getBackgroundColor(gradeColorTheme))
+                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, grade.getBackgroundColor(gradeColorTheme)))
             }
             gradeItemDescription.text = when {
                 grade.description.isNotBlank() -> grade.description

@@ -94,22 +94,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-                val statusInset = insets.getInsets(statusBars())
-                binding.mainToolbar.updatePadding(
-                    bottom = statusInset.bottom,
-                    left = statusInset.left,
-                    top = statusInset.top,
-                    right = statusInset.right
-                )
-                val navInset = insets.getInsets(navigationBars())
-                binding.mainBottomNav.updatePadding(
-                    bottom = navInset.bottom,
-                    left = navInset.left,
-                    right = navInset.right
-                )
-                WindowInsetsCompat.CONSUMED
-            }
+            binding.mainAppBar.isLifted = true
         }
         this.savedInstanceState = savedInstanceState
         messageContainer = binding.mainMessageContainer
@@ -247,7 +232,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun showActionBarElevation(show: Boolean) {
-        ViewCompat.setElevation(binding.mainToolbar, if (show) dpToPx(4f) else 0f)
+        //ViewCompat.setElevation(binding.mainToolbar, if (show) dpToPx(4f) else 0f)
     }
 
     override fun showBottomNavigation(show: Boolean) {
