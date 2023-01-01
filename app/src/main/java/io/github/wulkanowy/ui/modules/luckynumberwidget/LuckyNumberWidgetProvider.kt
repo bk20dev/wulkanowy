@@ -41,8 +41,8 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     companion object {
         private const val LUCKY_NUMBER_WIDGET_MAX_SIZE = 196
 
-        const val LUCKY_NUMBER_PENDING_INTENT_ID = 200
-        const val LUCKY_NUMBER_HISTORY_PENDING_INTENT_ID = 201
+        private const val LUCKY_NUMBER_PENDING_INTENT_ID = 300
+        private const val LUCKY_NUMBER_HISTORY_PENDING_INTENT_ID = 301
 
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
     }

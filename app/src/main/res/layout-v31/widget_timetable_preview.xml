@@ -25,8 +25,9 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:lines="1"
-            android:text="@string/widget_timetable_preview_date"
-            android:textAppearance="?attr/textAppearanceHeadline5" />
+            android:text="Pon, 03.10"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            tools:ignore="HardcodedText" />
 
         <ImageButton
             android:layout_width="48dp"
@@ -58,10 +59,9 @@
             android:backgroundTint="?attr/colorPrimary"
             android:contentDescription="@string/account_quick_manager"
             android:gravity="center"
-            android:text="@string/widget_timetable_initials_preview"
+            android:text="AW"
             android:textAppearance="?attr/textAppearanceTitleLarge"
             android:textColor="?attr/colorOnPrimary" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -92,7 +92,5 @@
             android:importantForAccessibility="no"
             android:src="@drawable/background_widget_item_timetable"
             app:tint="?attr/backgroundColor" />
-
     </LinearLayout>
-
 </LinearLayout>
