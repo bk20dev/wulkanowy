@@ -34,6 +34,7 @@
         <item name="switchPreferenceCompatStyle">
             @style/Preference.Wulkanowy.SwitchPreferenceCompat
         </item>
+        <item name="alertDialogTheme">@style/WulkanowyTheme.PreferenceAlertDialog</item>
     </style>
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">
