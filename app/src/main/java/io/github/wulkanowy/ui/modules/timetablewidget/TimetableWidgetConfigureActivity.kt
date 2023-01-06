@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
@@ -31,8 +30,6 @@ class TimetableWidgetConfigureActivity :
 
     @Inject
     lateinit var appInfo: AppInfo
-
-    private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,10 +87,5 @@ class TimetableWidgetConfigureActivity :
 
     override fun openLoginView() {
         startActivity(LoginActivity.getStartIntent(this))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        dialog?.dismiss()
     }
 }

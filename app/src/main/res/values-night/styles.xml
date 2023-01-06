@@ -70,6 +70,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:windowBackground">@drawable/background_material_alert_dialog</item>
     </style>
 
     <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">

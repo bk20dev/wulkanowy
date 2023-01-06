@@ -53,6 +53,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:windowBackground">@drawable/background_material_alert_dialog</item>
     </style>
 
     <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">
@@ -81,7 +82,7 @@
     <style name="WulkanowyTheme.PreferenceAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="dialogCornerRadius">28dp</item>
         <item name="cornerFamily">rounded</item>
-        <item name="android:background">@drawable/background_preference_alert_dialog</item>
+        <item name="android:background">@drawable/background_material_alert_dialog</item>
         <item name="android:layout" tools:ignore="PrivateResource">@layout/m3_alert_dialog</item>
     </style>
 </resources>
