@@ -44,6 +44,9 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
         <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
+        <item name="switchPreferenceCompatStyle">
+            @style/Preference.Wulkanowy.SwitchPreferenceCompat
+        </item>
     </style>
 
     <style name="Wulkanowy.Widget.Theme" parent="WulkanowyTheme">

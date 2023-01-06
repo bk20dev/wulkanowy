@@ -31,6 +31,9 @@
         <item name="android:statusBarColor">@color/colorStatusBarDark</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="switchPreferenceCompatStyle">
+            @style/Preference.Wulkanowy.SwitchPreferenceCompat
+        </item>
     </style>
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">

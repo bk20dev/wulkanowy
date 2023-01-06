@@ -28,6 +28,9 @@
         <item name="android:statusBarColor">@color/colorStatusBarLight</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
         <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
+        <item name="switchPreferenceCompatStyle">
+            @style/Preference.Wulkanowy.SwitchPreferenceCompat
+        </item>
     </style>
 
     <style name="WulkanowyTheme.NoActionBar" parent="WulkanowyTheme">
@@ -69,4 +72,8 @@
     <style name="WulkanowyTheme.Login" parent="WulkanowyTheme.NoActionBar" />
 
     <style name="WulkanowyTheme.MessageSend" parent="WulkanowyTheme.NoActionBar" />
+
+    <style name="Preference.Wulkanowy.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/layout_preference_switch</item>
+    </style>
 </resources>
