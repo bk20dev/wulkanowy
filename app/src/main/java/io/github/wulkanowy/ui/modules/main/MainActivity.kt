@@ -3,15 +3,13 @@ package io.github.wulkanowy.ui.modules.main
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.core.view.*
-import androidx.core.view.WindowInsetsCompat.Type.navigationBars
-import androidx.core.view.WindowInsetsCompat.Type.statusBars
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.Preference
@@ -96,6 +94,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             WindowCompat.setDecorFitsSystemWindows(window, false)
             binding.mainAppBar.isLifted = true
         }
+        initializeFragmentContainer()
+
         this.savedInstanceState = savedInstanceState
         messageContainer = binding.mainMessageContainer
         updateHelper.messageContainer = binding.mainFragmentContainer
@@ -187,6 +187,17 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         }
     }
 
+    private fun initializeFragmentContainer() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainFragmentContainer) { view, insets ->
+            val bottomInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+
+            view.updateLayoutParams<MarginLayoutParams> {
+                bottomMargin = if (binding.mainBottomNav.isVisible) 0 else bottomInsets.bottom
+            }
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
     override fun onPreferenceStartFragment(
         caller: PreferenceFragmentCompat,
         pref: Preference
@@ -237,14 +248,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override fun showBottomNavigation(show: Boolean) {
         binding.mainBottomNav.isVisible = show
-
-        if (appInfo.systemVersion >= P) {
-            window.navigationBarColor = if (show) {
-                getThemeAttrColor(android.R.attr.navigationBarColor)
-            } else {
-                getThemeAttrColor(R.attr.colorSurface)
-            }
-        }
+        binding.mainFragmentContainer.requestApplyInsets()
     }
 
     override fun openMoreDestination(destination: Destination) {
