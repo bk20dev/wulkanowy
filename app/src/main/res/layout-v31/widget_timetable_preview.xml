@@ -36,7 +36,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/all_prev"
             android:rotation="180"
-            android:src="@drawable/ic_chevron_right"
+            android:src="@drawable/ic_widget_chevron"
             android:tint="?attr/colorPrimary"
             app:tint="?attr/colorPrimary"
             tools:ignore="UseAppTint" />
@@ -46,7 +46,7 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/all_next"
-            android:src="@drawable/ic_chevron_right"
+            android:src="@drawable/ic_widget_chevron"
             android:tint="?attr/colorPrimary"
             app:tint="?attr/colorPrimary"
             tools:ignore="UseAppTint" />

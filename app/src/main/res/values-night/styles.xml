@@ -35,6 +35,7 @@
             @style/Preference.Wulkanowy.SwitchPreferenceCompat
         </item>
         <item name="alertDialogTheme">@style/WulkanowyTheme.PreferenceAlertDialog</item>
+        <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
     </style>
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">
