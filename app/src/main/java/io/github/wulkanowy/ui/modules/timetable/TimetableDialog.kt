@@ -93,12 +93,12 @@ class TimetableDialog : DialogFragment() {
                     if (canceled) {
                         timetableDialogChangesTitle.setTextColor(
                             requireContext().getThemeAttrColor(
-                                R.attr.colorPrimary
+                                R.attr.colorTimetableCanceled
                             )
                         )
                         timetableDialogChangesValue.setTextColor(
                             requireContext().getThemeAttrColor(
-                                R.attr.colorPrimary
+                                R.attr.colorTimetableCanceled
                             )
                         )
                     } else {
