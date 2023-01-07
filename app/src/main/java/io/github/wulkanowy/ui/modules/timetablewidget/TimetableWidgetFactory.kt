@@ -69,8 +69,9 @@ class TimetableWidgetFactory(
             val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
             val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
-            lessons = getLessons(date, studentId)
-            lastSynchronizationInstant = Instant.now()
+            val (lessons, lastSyncInstant) = getLessons(date, studentId)
+            this.lessons = lessons
+            this.lastSynchronizationInstant = lastSyncInstant
 
             val todayLastLessonEndTimestamp = lessons.maxOfOrNull { it.end }
             if (date == LocalDate.now() && todayLastLessonEndTimestamp != null) {
@@ -83,22 +84,28 @@ class TimetableWidgetFactory(
         }
     }
 
-    private fun getLessons(date: LocalDate, studentId: Long) = try {
+    private fun getLessons(date: LocalDate, studentId: Long): Pair<List<Timetable>, Instant> = try {
         runBlocking {
-            if (!studentRepository.isStudentSaved()) return@runBlocking emptyList<Timetable>()
+            if (!studentRepository.isStudentSaved()) {
+                return@runBlocking emptyList<Timetable>() to Instant.MIN
+            }
 
             val students = studentRepository.getSavedStudents()
             val student = students.singleOrNull { it.student.id == studentId }?.student
-                ?: return@runBlocking emptyList<Timetable>()
+                ?: return@runBlocking emptyList<Timetable>() to Instant.MIN
 
             val semester = semesterRepository.getCurrentSemester(student)
-            timetableRepository.getTimetable(student, semester, date, date, false)
+            val lastSynchronizationInstant =
+                timetableRepository.getLastRefreshTimestamp(semester, date, date)
+
+            val lessons = timetableRepository.getTimetable(student, semester, date, date, false)
                 .toFirstResult().dataOrNull?.lessons.orEmpty()
                 .sortedWith(compareBy({ it.number }, { !it.isStudentPlan }))
+            return@runBlocking lessons to lastSynchronizationInstant
         }
     } catch (e: Exception) {
         Timber.e(e, "An error has occurred in timetable widget factory")
-        emptyList()
+        emptyList<Timetable>() to Instant.MIN
     }
 
     companion object {
@@ -151,6 +158,7 @@ class TimetableWidgetFactory(
                 timetableChangeColor = R.color.timetable_change_dark
                 timetableCanceledColor = R.color.timetable_canceled_dark
             }
+
             else -> {
                 textColor = android.R.color.black
                 timetableChangeColor = R.color.timetable_change_light
