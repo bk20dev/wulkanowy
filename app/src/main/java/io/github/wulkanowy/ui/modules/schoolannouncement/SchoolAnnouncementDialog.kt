@@ -34,7 +34,6 @@ class SchoolAnnouncementDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
         announcement = requireArguments().serializable(ARGUMENT_KEY)
     }
 

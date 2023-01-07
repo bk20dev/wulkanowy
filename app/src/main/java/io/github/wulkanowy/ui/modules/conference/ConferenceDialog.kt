@@ -34,7 +34,6 @@ class ConferenceDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
         conference = requireArguments().serializable(ARGUMENT_KEY)
     }
 

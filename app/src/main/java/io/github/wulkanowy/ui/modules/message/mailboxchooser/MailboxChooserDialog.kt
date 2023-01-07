@@ -41,10 +41,6 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
             }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = DialogMailboxChooserBinding.inflate(layoutInflater).apply { _binding = this }.root

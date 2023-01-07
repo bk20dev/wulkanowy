@@ -35,10 +35,6 @@ class MobileDeviceTokenDialog : BaseDialogFragment<DialogMobileDeviceBinding>(),
         fun newInstance() = MobileDeviceTokenDialog()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = DialogMobileDeviceBinding.inflate(layoutInflater).apply { _binding = this }.root

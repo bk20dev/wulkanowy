@@ -28,10 +28,6 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
     // todo: move it to presenter
     private var date: LocalDate? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = DialogHomeworkAddBinding.inflate(layoutInflater).apply { _binding = this }.root

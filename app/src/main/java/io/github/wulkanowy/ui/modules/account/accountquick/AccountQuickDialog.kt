@@ -40,11 +40,6 @@ class AccountQuickDialog : BaseDialogFragment<DialogAccountQuickBinding>(), Acco
             }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = DialogAccountQuickBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
