@@ -13,6 +13,8 @@ import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.SharedPrefProvider
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -45,7 +47,7 @@ class TimetableWidgetFactory(
 
     private var timetableChangeColor: Int? = null
 
-    private var lastSynchronizationInstant: Instant? = null
+    private var lastSyncInstant: Instant? = null
 
     override fun getLoadingView() = null
 
@@ -69,36 +71,40 @@ class TimetableWidgetFactory(
             val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
             val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
-            lessons = getLessons(date, studentId)
-            lastSynchronizationInstant = Instant.now()
-
-            val todayLastLessonEndTimestamp = lessons.maxOfOrNull { it.end }
-            if (date == LocalDate.now() && todayLastLessonEndTimestamp != null) {
-                sharedPref.putLong(
-                    key = getTodayLastLessonEndDateTimeWidgetKey(appWidgetId),
-                    value = todayLastLessonEndTimestamp.epochSecond,
-                    sync = true
-                )
+            runCatching {
+                runBlocking {
+                    val student = getStudent(studentId) ?: return@runBlocking
+                    val semester = semesterRepository.getCurrentSemester(student)
+                    lessons = getLessons(student, semester, date)
+                    lastSyncInstant =
+                        timetableRepository.getLastRefreshTimestamp(semester, date, date)
+                    if (date == LocalDate.now()) {
+                        updateTodayLastLessonEnd(appWidgetId)
+                    }
+                }
+            }.onFailure {
+                Timber.e(it, "An error has occurred in timetable widget factory")
             }
         }
     }
 
-    private fun getLessons(date: LocalDate, studentId: Long) = try {
-        runBlocking {
-            if (!studentRepository.isStudentSaved()) return@runBlocking emptyList<Timetable>()
+    private suspend fun getStudent(studentId: Long): Student? {
+        val students = studentRepository.getSavedStudents()
+        return students.singleOrNull { it.student.id == studentId }?.student
+    }
 
-            val students = studentRepository.getSavedStudents()
-            val student = students.singleOrNull { it.student.id == studentId }?.student
-                ?: return@runBlocking emptyList<Timetable>()
+    private suspend fun getLessons(
+        student: Student, semester: Semester, date: LocalDate
+    ): List<Timetable> {
+        val timetable = timetableRepository.getTimetable(student, semester, date, date, false)
+        val lessons = timetable.toFirstResult().dataOrNull?.lessons.orEmpty()
+        return lessons.sortedBy { it.number }
+    }
 
-            val semester = semesterRepository.getCurrentSemester(student)
-            timetableRepository.getTimetable(student, semester, date, date, false)
-                .toFirstResult().dataOrNull?.lessons.orEmpty()
-                .sortedWith(compareBy({ it.number }, { !it.isStudentPlan }))
-        }
-    } catch (e: Exception) {
-        Timber.e(e, "An error has occurred in timetable widget factory")
-        emptyList()
+    private fun updateTodayLastLessonEnd(appWidgetId: Int) {
+        val todayLastLessonEnd = lessons.maxOfOrNull { it.end } ?: return
+        val key = getTodayLastLessonEndDateTimeWidgetKey(appWidgetId)
+        sharedPref.putLong(key, todayLastLessonEnd.epochSecond, true)
     }
 
     companion object {
@@ -107,7 +113,7 @@ class TimetableWidgetFactory(
 
     override fun getViewAt(position: Int): RemoteViews? {
         if (position == lessons.size) {
-            val synchronizationInstant = lastSynchronizationInstant ?: Instant.MIN
+            val synchronizationInstant = lastSyncInstant ?: Instant.MIN
             val synchronizationText = getSynchronizationInfoText(synchronizationInstant)
             return RemoteViews(context.packageName, R.layout.item_widget_timetable_footer).apply {
                 setTextViewText(R.id.timetableWidgetSynchronizationTime, synchronizationText)
@@ -151,6 +157,7 @@ class TimetableWidgetFactory(
                 timetableChangeColor = R.color.timetable_change_dark
                 timetableCanceledColor = R.color.timetable_canceled_dark
             }
+
             else -> {
                 textColor = android.R.color.black
                 timetableChangeColor = R.color.timetable_change_light
