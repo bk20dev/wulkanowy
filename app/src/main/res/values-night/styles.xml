@@ -55,16 +55,6 @@
         <item name="android:statusBarColor">?colorSurface</item>
     </style>
 
-    <style name="WulkanowyTheme.MessageSend" parent="WulkanowyTheme.NoActionBar">
-        <item name="android:navigationBarColor">?colorSurface</item>
-        <item name="android:statusBarColor">@color/colorStatusBarDark</item>
-    </style>
-
-    <style name="WulkanowyTheme.MessageSend.Black" parent="WulkanowyTheme.Black">
-        <item name="android:navigationBarColor">?colorSurface</item>
-        <item name="android:statusBarColor">@color/colorStatusBarBlack</item>
-    </style>
-
     <style name="WulkanowyTheme.WidgetAccountSwitcher" parent="Theme.Material3.Dark.Dialog">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/colorPrimaryDark</item>

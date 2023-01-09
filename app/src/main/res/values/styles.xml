@@ -72,8 +72,6 @@
 
     <style name="WulkanowyTheme.Login" parent="WulkanowyTheme.NoActionBar" />
 
-    <style name="WulkanowyTheme.MessageSend" parent="WulkanowyTheme.NoActionBar" />
-
     <style name="Preference.Wulkanowy.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat.Material">
         <item name="android:widgetLayout">@layout/layout_preference_switch</item>
     </style>

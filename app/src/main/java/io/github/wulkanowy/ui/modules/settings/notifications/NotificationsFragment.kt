@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.Preference
@@ -178,7 +177,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     }
 
     override fun openNotificationsPermissionDialog() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.notifications_header_title)
             .setMessage(R.string.notifications_header_description)
             .setPositiveButton(R.string.pref_notification_go_to_settings) { _, _ ->

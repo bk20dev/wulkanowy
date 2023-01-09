@@ -83,7 +83,7 @@ class ErrorDialog : DialogFragment() {
     }
 
     private fun openConfirmDialog(callback: () -> Unit) {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.dialog_error_check_update)
             .setMessage(R.string.dialog_error_check_update_message)
             .setNeutralButton(R.string.about_feedback) { _, _ -> callback() }

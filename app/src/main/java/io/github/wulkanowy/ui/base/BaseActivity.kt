@@ -4,9 +4,9 @@ import android.app.ActivityManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import io.github.wulkanowy.R
@@ -62,7 +62,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
     }
 
     override fun showExpiredDialog() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(R.string.main_session_expired)
             .setMessage(R.string.main_session_relogin)
             .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onExpiredLoginSelected() }

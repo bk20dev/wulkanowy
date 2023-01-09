@@ -28,7 +28,6 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
     // todo: move it to presenter
     private var date: LocalDate? = null
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = DialogHomeworkAddBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
