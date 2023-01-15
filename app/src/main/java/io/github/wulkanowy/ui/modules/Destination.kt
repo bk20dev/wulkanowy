@@ -11,10 +11,12 @@ import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.luckynumber.history.LuckyNumberHistoryFragment
 import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
-import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolFragment
+import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
+import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
@@ -40,11 +42,13 @@ sealed class Destination {
         NOTE(Note),
         CONFERENCE(Conference),
         SCHOOL_ANNOUNCEMENT(SchoolAnnouncement),
-        SCHOOL(School),
+        SCHOOL_AND_TEACHERS(SchoolAndTeachers),
         LUCKY_NUMBER(LuckyNumber),
         LUCKY_NUMBER_HISTORY(LuckyNumberHistory),
         MORE(More),
-        MESSAGE(Message);
+        MESSAGE(Message),
+        MOBILE_DEVICE(MobileDevice),
+        SETTINGS(Settings);
     }
 
     @Serializable
@@ -105,9 +109,9 @@ sealed class Destination {
     }
 
     @Serializable
-    object School : Destination() {
-        override val destinationType get() = Type.SCHOOL
-        override val destinationFragment get() = SchoolFragment.newInstance()
+    object SchoolAndTeachers : Destination() {
+        override val destinationType get() = Type.SCHOOL_AND_TEACHERS
+        override val destinationFragment get() = SchoolAndTeachersFragment.newInstance()
     }
 
     @Serializable
@@ -132,5 +136,17 @@ sealed class Destination {
     object Message : Destination() {
         override val destinationType get() = Type.MESSAGE
         override val destinationFragment get() = MessageFragment.newInstance()
+    }
+
+    @Serializable
+    object MobileDevice : Destination() {
+        override val destinationType get() = Type.MOBILE_DEVICE
+        override val destinationFragment get() = MobileDeviceFragment.newInstance()
+    }
+
+    @Serializable
+    object Settings : Destination() {
+        override val destinationType get() = Type.SETTINGS
+        override val destinationFragment get() = SettingsFragment.newInstance()
     }
 }
