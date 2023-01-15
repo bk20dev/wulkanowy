@@ -124,7 +124,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
             attendanceExcuseButton.setOnClickListener { presenter.onExcuseButtonClick() }
 
-            attendanceNavContainer.elevation = requireContext().dpToPx(8f)
+            attendanceNavContainer.elevation = requireContext().dpToPx(3f)
         }
     }
 

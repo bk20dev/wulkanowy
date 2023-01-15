@@ -69,7 +69,7 @@ class AdditionalLessonsFragment :
 
             openAddAdditionalLessonButton.setOnClickListener { presenter.onAdditionalLessonAddButtonClicked() }
 
-            additionalLessonsNavContainer.elevation = requireContext().dpToPx(8f)
+            additionalLessonsNavContainer.elevation = requireContext().dpToPx(3f)
         }
     }
 
