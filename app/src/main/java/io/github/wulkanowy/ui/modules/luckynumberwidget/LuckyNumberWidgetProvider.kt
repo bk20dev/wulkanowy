@@ -15,7 +15,6 @@ import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.LuckyNumber
-import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.toFirstResult
@@ -72,11 +71,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             val studentId = sharedPref.getLong(getStudentWidgetKey(widgetId), 0)
             val luckyNumberResource = getLuckyNumber(studentId, widgetId)
             val luckyNumber = luckyNumberResource.dataOrNull?.luckyNumber?.toString()
-
-            if (luckyNumberResource is Resource.Error) {
-                Timber.e("Error loading lucky number for widget", luckyNumberResource.error)
-            }
-
             val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber)
                 .apply {
                     setTextViewText(R.id.luckyNumberWidgetValue, luckyNumber ?: "-")
@@ -159,9 +153,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 Resource.Success<LuckyNumber?>(null)
             }
         } catch (e: Exception) {
-            if (e.cause !is NoCurrentStudentException) {
-                Timber.e(e, "An error has occurred in lucky number provider")
-            }
+            Timber.e(e, "An error has occurred in lucky number provider")
             Resource.Error(e)
         }
     }
