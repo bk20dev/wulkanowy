@@ -212,7 +212,9 @@ class TimetableWidgetFactory(
             remoteViews.setTextColor(R.id.timetableWidgetItemSubject, changesTextColor)
         }
 
-        if (lesson.room != lesson.roomOld) {
+        if (lesson.room.isBlank()) {
+            remoteViews.setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
+        } else if (lesson.room != lesson.roomOld) {
             remoteViews.setTextColor(R.id.timetableWidgetItemRoom, changesTextColor)
         }
 
