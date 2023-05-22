@@ -38,7 +38,7 @@
                 android:layout_gravity="center"
                 android:text="JK"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
-                android:textColor="@android:color/white"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="18sp"
                 tools:ignore="HardcodedText" />
 
