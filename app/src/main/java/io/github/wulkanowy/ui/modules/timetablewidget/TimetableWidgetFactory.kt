@@ -124,14 +124,12 @@ class TimetableWidgetFactory(
 
         val lessonStartTime = lesson.start.toFormattedString(TIME_FORMAT_STYLE)
         val lessonEndTime = lesson.end.toFormattedString(TIME_FORMAT_STYLE)
-        val roomText = "${context.getString(R.string.timetable_room)} ${lesson.room}"
 
         val remoteViews = RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
             setTextViewText(R.id.timetableWidgetItemNumber, lesson.number.toString())
             setTextViewText(R.id.timetableWidgetItemTimeStart, lessonStartTime)
             setTextViewText(R.id.timetableWidgetItemTimeFinish, lessonEndTime)
             setTextViewText(R.id.timetableWidgetItemSubject, lesson.subject)
-            setTextViewText(R.id.timetableWidgetItemRoom, roomText)
             setTextViewText(R.id.timetableWidgetItemTeacher, lesson.teacher)
             setTextViewText(R.id.timetableWidgetItemDescription, lesson.info)
             setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
@@ -139,6 +137,13 @@ class TimetableWidgetFactory(
 
         updateTheme()
         clearLessonStyles(remoteViews)
+
+        if (lesson.room.isBlank()) {
+            remoteViews.setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
+        } else {
+            val roomText = "${context.getString(R.string.timetable_room)} ${lesson.room}"
+            remoteViews.setTextViewText(R.id.timetableWidgetItemRoom, roomText)
+        }
 
         when {
             lesson.canceled -> applyCancelledLessonStyles(remoteViews)
@@ -212,9 +217,7 @@ class TimetableWidgetFactory(
             remoteViews.setTextColor(R.id.timetableWidgetItemSubject, changesTextColor)
         }
 
-        if (lesson.room.isBlank()) {
-            remoteViews.setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
-        } else if (lesson.room != lesson.roomOld) {
+        if (lesson.room != lesson.roomOld) {
             remoteViews.setTextColor(R.id.timetableWidgetItemRoom, changesTextColor)
         }
 
