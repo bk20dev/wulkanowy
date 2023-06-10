@@ -141,8 +141,7 @@ class TimetableWidgetFactory(
         if (lesson.room.isBlank()) {
             remoteViews.setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
         } else {
-            val roomText = "${context.getString(R.string.timetable_room)} ${lesson.room}"
-            remoteViews.setTextViewText(R.id.timetableWidgetItemRoom, roomText)
+            remoteViews.setTextViewText(R.id.timetableWidgetItemRoom, lesson.room)
         }
 
         when {

@@ -180,7 +180,7 @@
     <string name="timetable_finished">Finished</string>
     <string name="timetable_now">Now: %s</string>
     <string name="timetable_next">Next: %s</string>
-    <string name="timetable_later">Later: %s</string>
+    <string name="timetable_later" translatable="false">Later: %s</string>
     <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
     <string name="timetable_notify_change_room">Change of room from %1$s to %2$s</string>
     <string name="timetable_notify_change_teacher">Change of teacher from %1$s to %2$s</string>
